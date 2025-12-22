@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura AI - Academic Sentinel</title>
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --accent: #6366f1;
+            --warn: #f43f5e;
+            --success: #10b981;
+            --text: #f8fafc;
+            --nav-bg: #1e293b;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding-bottom: 70px; /* Space for nav */
+        }
+
+        .container { padding: 20px; max-width: 600px; margin: auto; }
+
+        /* Navigation */
+        nav {
+            position: fixed; bottom: 0; width: 100%;
+            background: var(--nav-bg); display: flex;
+            justify-content: space-around; padding: 15px 0;
+            border-top: 1px solid rgba(255,255,255,0.1); z-index: 100;
+        }
+
+        nav button {
+            background: none; border: none; color: white;
+            font-size: 1rem; cursor: pointer; opacity: 0.6;
+        }
+
+        nav button.active { opacity: 1; font-weight: bold; border-bottom: 2px solid var(--accent); }
+
+        /* UI Components */
+        .card {
+            background: var(--card-bg); backdrop-filter: blur(15px);
+            padding: 20px; border-radius: 16px; margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); display: flex; align-items: center;
+            justify-content: center; z-index: 1000;
+        }
+
+        .modal {
+            background: #1e293b; padding: 30px; border-radius: 20px;
+            width: 85%; max-width: 400px; text-align: center;
+        }
+
+        input {
+            width: 100%; padding: 12px; margin: 10px 0;
+            border-radius: 8px; border: 1px solid #475569;
+            background: #0f172a; color: white; box-sizing: border-box;
+        }
+
+        .action-btn {
+            background: var(--accent); color: white; border: none;
+            padding: 12px; border-radius: 8px; cursor: pointer;
+            width: 100%; font-weight: bold; margin-top: 10px;
+        }
+
+        .hidden { display: none !important; }
+
+        .notification {
+            background: var(--accent); padding: 12px; border-radius: 8px;
+            margin-bottom: 15px; font-size: 0.9rem; border-left: 5px solid white;
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-no { background: var(--warn); }
+    </style>
+</head>
+<body>
+
+    <div id="setup-screen" class="overlay hidden">
+        <div class="modal">
+            <h2>System Setup</h2>
+            <p>Enter your details to begin.</p>
+            <input type="text" id="name-input" placeholder="Your Name">
+            <input type="number" id="commute-input" placeholder="Commute to Uni (min)">
+            <button class="action-btn" onclick="saveProfile()">Save & Start</button>
+        </div>
+    </div>
+
+    <div id="view-dashboard" class="container">
+        <header>
+            <h1 id="greeting">Hello</h1>
+            <p id="today-info"></p>
+        </header>
+
+        <div id="class-alert" class="notification hidden"></div>
+
+        <section class="card">
+            <h3>Next Cycle</h3>
+            <div id="readiness-text">Loading routine...</div>
+        </section>
+
+        <section id="ai-section" class="card">
+            <h3>AI focus Assistant</h3>
+            <div id="breakfast-prompt" class="hidden">
+                <p>Morning class is over. Have you completed your meal?</p>
+                <div class="btn-group">
+                    <button class="action-btn" onclick="triggerGemini(true)">Yes</button>
+                    <button class="action-btn btn-no" onclick="triggerGemini(false)">No</button>
+                </div>
+            </div>
+            <p id="ai-output" style="font-style: italic; color: #94a3b8;">Waiting for class completion...</p>
+        </section>
+    </div>
+
+    <div id="view-profile" class="container hidden">
+        <h1>Profile Settings</h1>
+        <section class="card">
+            <p><strong>Name:</strong> <span id="prof-name"></span></p>
+            <p><strong>Commute:</strong> <span id="prof-commute"></span> mins</p>
+            <hr style="opacity:0.1">
+            <button class="action-btn btn-no" onclick="resetSystem()">Reset All Data</button>
+            <p style="font-size: 0.8rem; margin-top:10px; opacity:0.6;">Resetting will clear your name and commute preferences.</p>
+        </section>
+    </div>
+
+    <nav>
+        <button id="nav-dash" class="active" onclick="switchView('dashboard')">Dashboard</button>
+        <button id="nav-prof" onclick="switchView('profile')">Profile</button>
+    </nav>
+
+    <script>
+        const API_KEY = "AIzaSyDdgAnun9h4dd9KUncxK4UooYdrU1IzjaQ";
+        
+        // Hardcoded Routine from tmp (2).html
+        const ROUTINE = {
+            "Saturday": [{t: "08:30", n: "DBMSL", r: "604"}, {t: "13:00", n: "BFE", r: "901"}, {t: "14:30", n: "DBMS", r: "408"}],
+            "Sunday": [{t: "10:00", n: "Algo", r: "409"}, {t: "11:30", n: "AlgoL", r: "608"}],
+            "Monday": [{t: "08:30", n: "MLADE", r: "613"}, {t: "10:00", n: "Algo", r: "510"}, {t: "11:30", n: "MML", r: "503"}, {t: "16:00", n: "BFE", r: "404"}],
+            "Tuesday": [{t: "10:00", n: "DBMS", r: "406"}, {t: "13:00", n: "MM", r: "406"}],
+            "Wednesday": [{t: "11:30", n: "MLADE", r: "510"}, {t: "13:00", n: "MM", r: "510"}]
+        };
+
+        window.onload = function() {
+            if (!localStorage.getItem("aura_name")) {
+                document.getElementById("setup-screen").classList.remove("hidden");
+            } else {
+                updateUI();
+                setInterval(checkScheduleUpdates, 60000); // Check every minute
+            }
+        };
+
+        function saveProfile() {
+            const name = document.getElementById("name-input").value;
+            const commute = document.getElementById("commute-input").value;
+            if(name && commute) {
+                localStorage.setItem("aura_name", name);
+                localStorage.setItem("aura_commute", commute);
+                document.getElementById("setup-screen").classList.add("hidden");
+                updateUI();
+            }
+        }
+
+        function switchView(view) {
+            document.getElementById("view-dashboard").classList.toggle("hidden", view !== 'dashboard');
+            document.getElementById("view-profile").classList.toggle("hidden", view !== 'profile');
+            document.getElementById("nav-dash").classList.toggle("active", view === 'dashboard');
+            document.getElementById("nav-prof").classList.toggle("active", view === 'profile');
+        }
+
+        function updateUI() {
+            const name = localStorage.getItem("aura_name");
+            const commute = parseInt(localStorage.getItem("aura_commute"));
+            document.getElementById("greeting").innerText = `Hello, ${name}`;
+            document.getElementById("prof-name").innerText = name;
+            document.getElementById("prof-commute").innerText = commute;
+
+            const now = new Date();
+            const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+            document.getElementById("today-info").innerText = `${day}, ${now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+
+            calculateNextAlarm(day, commute);
+            checkScheduleUpdates();
+        }
+
+        function calculateNextAlarm(day, commute) {
+            const dayClasses = ROUTINE[day];
+            const readinessText = document.getElementById("readiness-text");
+
+            if (dayClasses) {
+                const first = dayClasses[0];
+                const [h, m] = first.t.split(':');
+                const classTime = new Date();
+                classTime.setHours(h, m, 0);
+
+                // Alarm: commute time + 60 mins for prep
+                const wake = new Date(classTime.getTime() - (commute + 60) * 60000);
+                const sleep = new Date(wake.getTime() - 8 * 3600000);
+
+                readinessText.innerHTML = `
+                    <strong>Morning Alarm:</strong> ${wake.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}<br>
+                    <strong>Sleep Reminder:</strong> ${sleep.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
+                `;
+            } else {
+                readinessText.innerText = "No classes today. Enjoy your break!";
+            }
+        }
+
+        function checkScheduleUpdates() {
+            const now = new Date();
+            const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+            const classes = ROUTINE[day] || [];
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+
+            classes.forEach(c => {
+                const [h, m] = c.t.split(':');
+                const classTimeMinutes = parseInt(h) * 60 + parseInt(m);
+                const diff = classTimeMinutes - currentTime;
+
+                // 10-Minute Warning
+                if (diff > 0 && diff <= 10) {
+                    const alert = document.getElementById("class-alert");
+                    alert.classList.remove("hidden");
+                    alert.innerText = `Class in 10 mins: ${c.n} at Room ${c.r}. Get ready!`;
+                }
+
+                // Breakfast Trigger: Show after the 8:30 or 10:00 class starts
+                if (currentTime > classTimeMinutes + 90 && !localStorage.getItem("breakfast_done_" + now.toDateString())) {
+                    document.getElementById("breakfast-prompt").classList.remove("hidden");
+                }
+            });
+        }
+
+        async function triggerGemini(ate) {
+            document.getElementById("breakfast-prompt").classList.add("hidden");
+            localStorage.setItem("breakfast_done_" + new Date().toDateString(), "true");
+            
+            const output = document.getElementById("ai-output");
+            output.innerText = "Gemini is analyzing your focus...";
+
+            const day = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+            const classes = ROUTINE[day] || [];
+            
+            // Find the next class to make the task relevant
+            const now = new Date();
+            const next = classes.find(c => {
+                const [h, m] = c.t.split(':');
+                return (parseInt(h) * 60 + parseInt(m)) > (now.getHours() * 60 + now.getMinutes());
+            }) || {n: "End of Day", r: "N/A"};
+
+            const prompt = `Student has ${ate ? 'eaten' : 'not eaten'} breakfast. 
+                            Next class is ${next.n} in Room ${next.r}. 
+                            Suggest one 10-minute focus task to prepare for this class or manage energy.`;
+
+            try {
+                const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const data = await resp.json();
+                output.innerText = "AI Focus Task: " + data.candidates[0].content.parts[0].text;
+            } catch (e) {
+                output.innerText = "Task: Review the last 5 mins of previous notes for " + next.n;
+            }
+        }
+
+        function resetSystem() {
+            if(confirm("Are you sure you want to reset your profile?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
