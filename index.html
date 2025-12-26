@@ -2,9 +2,11 @@
 Thhis is full AI made code for Routine.html
 i tried to solve a problem which i faced in 3rd semester.
 -->
-<!-- API on line 383
-    routine time on 386 
-    Notice update on 245-->
+<!--
+    API on line 601
+    routine time on 391
+    notice 247
+-->
 
 
 <!DOCTYPE html>
@@ -240,32 +242,10 @@ i tried to solve a problem which i faced in 3rd semester.
             </button>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
         <section class="card notice-card" id="notice-section">
             <h1 style="color: var(--danger); margin-top: 0;">📢 Notice</h1>
-            <p id="manual-notice-text" style="font-size: 2rem; margin: 10px 0;">READ ATTENTIVELY, <br>বাকিটা দিহান জানে</p>
+            <p id="manual-notice-text" style="font-size: 2rem; margin: 10px 0;">ALL DBMS, DBMSL, BFE classes are cancelled<br><br></p>
         </section>
-
-
-
-
-
-
-
-
-
-
-
 
         <section class="card">
             <h3>Up Next</h3>
@@ -406,8 +386,7 @@ i tried to solve a problem which i faced in 3rd semester.
     </nav>
 
     <script>
-        // --- DATA CONFIGURATION ---
-        const API_KEY = ""; 
+
         
 const ROUTINES = {
     "C1": {
@@ -423,13 +402,11 @@ const ROUTINES = {
             { t: "8:30-10:00", n: "MLADE", r: "613" },
             { t: "10:00-11:30", n: "Algorithms", r: "510" },
             { t: "11:30-2:30", n: "Algorithms Lab", r: "904" },
-            // Added color property here
             { t: "2:30-4:00", n: "BREAK", r: "DO LUNCH", color: "red" }, 
             { t: "4:00-5:30", n: "BFE", r: "404" }
         ],
         "Tuesday": [
             { t: "10:00-11:30", n: "DBMS", r: "406" },
-            // Added color property here
             { t: "11:30-1:00", n: "BREAK", r: "DO BREAKFAST", color: "red" }, 
             { t: "1:00-2:30", n: "MM", r: "406" }
         ],
@@ -442,7 +419,6 @@ const ROUTINES = {
     "C2": {
         "Saturday": [
             { t: "8:30-11:30", n: "DBMS Lab", r: "604" },
-            // Added color property here
             { t: "11:30-1:00", n: "BREAK", r: "DO BREAKFAST", color: "red" },
             { t: "1:00-2:30", n: "BFE", r: "901" },
             { t: "2:30-4:00", n: "DBMS", r: "408" }
@@ -455,13 +431,11 @@ const ROUTINES = {
             { t: "8:30-10:00", n: "MLADE", r: "613" },
             { t: "10:00-11:30", n: "Algorithms", r: "510" },
             { t: "11:30-2:30", n: "MML", r: "503" },
-            // Added color property here
             { t: "2:30-4:00", n: "BREAK", r: "DO LUNCH", color: "red" },
             { t: "4:00-5:30", n: "BFE", r: "404" }
         ],
         "Tuesday": [
             { t: "10:00-11:30", n: "DBMS", r: "406" },
-            // Added color property here
             { t: "11:30-1:00", n: "BREAK", r: "DO BREAKFAST", color: "red" },
             { t: "1:00-2:30", n: "MM", r: "406" }
         ],
@@ -624,66 +598,77 @@ const ROUTINES = {
             }
         }
 
-        // --- AI GEMINI INTEGRATION (IMPROVED) ---
-        function setAIMode(mode) {
-            currentAIMode = mode;
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            document.getElementById('chip-' + mode).classList.add('active');
+const API_KEY = "AIzaSyC__gbqYOk_zQgXkp6Cq8-NHW6V4StBrAs"; // Your Key
+
+// TRY THESE MODELS IF ONE FAILS:
+// 1. "gemini-1.5-flash-latest" (Fastest, newest)
+// 2. "gemini-1.5-flash-001"    (Specific version)
+// 3. "gemini-pro"               (Older, most stable standard)
+
+const MODEL_NAME = "gemini-2.5-flash";
+
+ currentAIMode = 'study'; 
+
+function setAIMode(mode) {
+    currentAIMode = mode;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    const activeChip = document.getElementById('chip-' + mode);
+    if (activeChip) activeChip.classList.add('active');
+}
+
+async function getAIAdvice() {
+    const responseDiv = document.getElementById("ai-response");
+    responseDiv.classList.remove("hidden");
+    responseDiv.innerHTML = `<div class="ai-loading">Connecting to Brain...</div>`;
+
+    let systemInstruction = "";
+    if (currentAIMode === 'relax') systemInstruction = "suggest a quick, unique 5-10 minute relaxation activity with spirituality.";
+    else if (currentAIMode === 'study') systemInstruction = "give a short, highly effective study tip.";
+    else if (currentAIMode === 'motivate') systemInstruction = "give a short, powerful motivational quote.";
+    else systemInstruction = "give a helpful tip for a student.";
+
+    const prompt = `I am a student. Please ${systemInstruction} Keep it under 25 words. Be direct.`;
+
+    const safetySettings = [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
+    ];
+
+    try {
+        // USING THE MODEL_NAME VARIABLE HERE
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
+        
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                contents: [{ parts: [{ text: prompt }] }],
+                safetySettings: safetySettings
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            console.error("API ERROR:", data);
+            throw new Error(data.error?.message || `API Error: ${res.status}`);
         }
 
-        async function getAIAdvice() {
-            const responseDiv = document.getElementById("ai-response");
-            responseDiv.classList.remove("hidden");
-            responseDiv.innerHTML = `<div class="ai-loading">Connecting to Brain...</div>`;
-
-            let systemInstruction = "";
-            if (currentAIMode === 'relax') systemInstruction = "suggest a quick, unique 5-10 minute relaxation activity.";
-            if (currentAIMode === 'study') systemInstruction = "give a short, highly effective study tip.";
-            if (currentAIMode === 'motivate') systemInstruction = "give a short, powerful motivational quote.";
-
-            const prompt = `I am a student. Please ${systemInstruction} Keep it under 25 words. Be direct.`;
-
-            // Adding safety settings to prevent AI blocking simple requests
-            const safetySettings = [
-                { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-                { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-                { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-                { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-            ];
-
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        contents: [{ parts: [{ text: prompt }] }],
-                        safetySettings: safetySettings
-                    })
-                });
-                
-                if(!res.ok) throw new Error("API Error");
-                
-                const data = await res.json();
-                
-                // Safety check for empty response
-                if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
-                    throw new Error("No response generated.");
-                }
-
-                const suggestion = data.candidates[0].content.parts[0].text;
-                
-                // Formatting markdown-style bolding
-                const formatted = suggestion.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                responseDiv.innerHTML = formatted;
-                
-            } catch (error) {
-                responseDiv.innerHTML = `
-                    <div style="color:var(--danger)">This feature is not available or server is busy.</div>
-                    <button class="btn btn-sm btn-outline" style="margin-top:10px;" onclick="getAIAdvice()">Retry</button>
-                `;
-                console.error(error);
-            }
+        if (!data.candidates || data.candidates.length === 0) {
+            throw new Error("No response generated.");
         }
+
+        const suggestion = data.candidates[0].content.parts[0].text;
+        const formatted = suggestion.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        responseDiv.innerHTML = formatted;
+        
+    } catch (error) {
+        console.error(error);
+        responseDiv.innerHTML = `<div style="color:red">Error: ${error.message}</div>`;
+    }
+}
 
         // --- SCHEDULE VIEW ---
         function toggleScheduleView(section) {
