@@ -1,3 +1,8 @@
+<!-- 
+Thhis is full AI made code for Routine.html
+i tried to solve a problem which i faced in 3rd semester.
+-->
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -7,27 +12,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Light Mode (Default) */
-            --primary: #3b82f6;       /* Blue */
+            /* Light Mode */
+            --primary: #3b82f6;
             --primary-fg: #ffffff;
-            --bg: #f1f5f9;            /* Light Grey */
-            --surface: #ffffff;       /* White cards */
-            --text-main: #0f172a;     /* Dark text */
-            --text-muted: #64748b;    /* Grey text */
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
             --border: #e2e8f0;
             --nav-bg: #ffffff;
             --danger: #ef4444;
+            --success: #10b981;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         [data-theme="dark"] {
-            /* Dark Mode Overrides */
-            --primary: #60a5fa;       /* Lighter Blue */
+            /* Dark Mode */
+            --primary: #60a5fa;
             --primary-fg: #0f172a;
-            --bg: #0f172a;            /* Dark Navy */
-            --surface: #1e293b;       /* Dark Slate cards */
-            --text-main: #f8fafc;     /* White text */
-            --text-muted: #94a3b8;    /* Light Grey text */
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --border: #334155;
             --nav-bg: #1e293b;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
@@ -38,8 +44,9 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
             transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
         }
 
         .container {
@@ -63,9 +70,7 @@
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             box-shadow: var(--shadow);
-            transition: all 0.2s;
         }
-        .theme-toggle:active { transform: scale(0.95); }
 
         /* Typography */
         h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
@@ -81,27 +86,44 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 16px;
-            transition: background-color 0.3s, border-color 0.3s;
+            transition: 0.3s;
         }
 
         /* Inputs & Buttons */
-        input, textarea {
+        input, textarea, select {
             width: 100%; padding: 14px; margin: 8px 0;
             border-radius: 10px; border: 1px solid var(--border);
             background: var(--bg); color: var(--text-main);
             box-sizing: border-box; font-family: inherit; font-size: 1rem;
         }
-        input:focus, textarea:focus { outline: 2px solid var(--primary); border-color: transparent; }
+        input:focus, textarea:focus, select:focus { outline: 2px solid var(--primary); border-color: transparent; }
 
         .btn {
             background: var(--primary); color: var(--primary-fg);
             border: none; padding: 14px; border-radius: 10px;
             cursor: pointer; width: 100%; font-weight: 600; font-size: 1rem;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn:active { opacity: 0.8; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
         .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-sm { padding: 8px 12px; font-size: 0.85rem; width: auto; }
+
+        /* Schedule Toggle */
+        .toggle-container {
+            display: flex; background: var(--surface);
+            padding: 4px; border-radius: 12px; border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .toggle-btn {
+            flex: 1; padding: 8px; border: none; background: transparent;
+            color: var(--text-muted); font-weight: 600; cursor: pointer;
+            border-radius: 8px; transition: 0.2s;
+        }
+        .toggle-btn.active {
+            background: var(--primary); color: var(--primary-fg); shadow: var(--shadow);
+        }
 
         /* Navigation */
         nav {
@@ -111,7 +133,6 @@
             padding: 12px 0;
             border-top: 1px solid var(--border);
             z-index: 100;
-            transition: background-color 0.3s, border-color 0.3s;
         }
         nav button {
             background: none; border: none;
@@ -138,46 +159,80 @@
             margin-left: 8px; font-weight: bold;
         }
 
-        /* Modals */
+        /* ToDo List Styling */
+        .todo-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 0; border-bottom: 1px solid var(--border);
+        }
+        .todo-item input[type="checkbox"] { width: 20px; height: 20px; margin: 0; }
+        .todo-item.completed span { text-decoration: line-through; color: var(--text-muted); }
+
+        /* Modals & Overlays */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
             display: flex; align-items: center; justify-content: center;
             z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         .overlay.active { opacity: 1; pointer-events: auto; }
+        
         .modal {
             background: var(--surface); padding: 25px;
             border-radius: 20px; width: 85%; max-width: 400px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
+        /* Fuel Block Specific */
+        #fuel-screen { z-index: 2000; background: var(--bg); }
+        .fuel-content { text-align: center; max-width: 400px; padding: 30px; }
+        .fuel-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+
         .hidden { display: none !important; }
+        
+        /* AI Response Area */
+        #ai-response {
+            margin-top: 15px; padding: 15px; background: var(--bg);
+            border-radius: 12px; font-size: 0.95rem; 
+            border: 1px solid var(--border);
+            line-height: 1.6;
+        }
+        .ai-loading { opacity: 0.6; animation: pulse 1.5s infinite; text-align: center; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        
+        .chip-container { display: flex; gap: 8px; margin-bottom: 10px; }
+        .chip {
+            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border);
+            background: var(--surface); font-size: 0.8rem; cursor: pointer;
+            transition: 0.2s;
+        }
+        .chip.active { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
     </style>
 </head>
 <body>
+
+    <div id="fuel-screen" class="overlay">
+        <div class="fuel-content">
+            <span class="fuel-icon">🍳</span>
+            <h1 id="fuel-title">Fuel Required</h1>
+            <p id="fuel-msg">Your brain needs energy for class.</p>
+            <div class="card" style="margin-top: 30px;">
+                <p>Have you finished your meal?</p>
+                <button class="btn btn-success" onclick="confirmMeal()">Yes, I have Eaten</button>
+            </div>
+        </div>
+    </div>
 
     <div id="view-dashboard" class="container">
         <div class="top-bar">
             <div>
                 <h1 id="greeting">Hello</h1>
+                <p id="section-badge" style="font-size: 0.8rem; font-weight: 600; color: var(--primary); text-transform: uppercase;"></p>
                 <p id="today-info" style="color: var(--text-muted); font-size: 0.9rem;"></p>
             </div>
             <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
-                <svg id="icon-sun" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
+                <span id="icon-sun" class="hidden">☀️</span>
+                <span id="icon-moon">🌙</span>
             </button>
         </div>
 
@@ -185,24 +240,54 @@
             <h3>Up Next</h3>
             <div id="next-class-display">
                 <h2 style="font-size: 2rem; margin: 10px 0;">Loading...</h2>
-                <p style="color: var(--text-muted);">Please wait...</p>
+                <p>Please wait...</p>
             </div>
+        </section>
+
+        <section class="card" id="ai-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="margin:0;">✨ AI Assistant</h3>
+                <span style="font-size:0.7rem; color:var(--text-muted)">Powered by Gemini</span>
+            </div>
+            
+            <p style="margin-bottom: 12px;">What kind of advice do you need?</p>
+            
+            <div class="chip-container">
+                <button class="chip active" id="chip-relax" onclick="setAIMode('relax')">🌴 Relax</button>
+                <button class="chip" id="chip-study" onclick="setAIMode('study')">📚 Study Tip</button>
+                <button class="chip" id="chip-motivate" onclick="setAIMode('motivate')">🔥 Motivation</button>
+            </div>
+
+            <button class="btn btn-outline" onclick="getAIAdvice()">
+                Ask AI
+            </button>
+            <div id="ai-response" class="hidden"></div>
         </section>
 
         <section class="card">
             <h3>Quick Actions</h3>
             <button class="btn btn-outline" onclick="switchView('schedule')">View Full Schedule</button>
-            <button class="btn btn-outline" onclick="switchView('search')" style="margin-top:10px;">Find a Class</button>
+            <button class="btn btn-outline" onclick="switchView('search')" style="margin-top:10px;">Find My Class</button>
         </section>
     </div>
 
     <div id="view-schedule" class="container hidden">
         <h1 style="margin-bottom: 20px;">Weekly Schedule</h1>
+        
+        <div class="toggle-container">
+            <button id="sched-toggle-c1" class="toggle-btn" onclick="toggleScheduleView('C1')">Section C1</button>
+            <button id="sched-toggle-c2" class="toggle-btn" onclick="toggleScheduleView('C2')">Section C2</button>
+        </div>
+
         <div id="full-routine-list"></div>
-        <div style="height: 50px;"></div> </div>
+        <div style="height: 50px;"></div> 
+    </div>
 
     <div id="view-search" class="container hidden">
-        <h1 style="margin-bottom: 20px;">Find Class</h1>
+        <h1 style="margin-bottom: 20px;">Find My Class</h1>
+        <p style="color:var(--text-muted); margin-bottom:15px; font-size:0.9rem;">
+            Searching only <strong><span id="search-section-label"></span></strong> classes.
+        </p>
         <div class="card">
             <input type="text" id="search-bar" placeholder="Type subject (e.g. DBMS)..." onkeyup="performSearch()">
         </div>
@@ -215,32 +300,58 @@
             <p style="color: var(--text-muted);">Name</p>
             <h2 id="prof-name">Student</h2>
             <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
-            <p style="color: var(--text-muted);">Commute Time</p>
-            <h2><span id="prof-commute">0</span> mins</h2>
             
-            <button class="btn btn-danger" style="margin-top: 25px;" onclick="resetSystem()">Reset Profile Data</button>
+            <div style="display: flex; gap: 20px;">
+                <div>
+                    <p style="color: var(--text-muted);">Section</p>
+                    <h2 id="prof-section">C1</h2>
+                </div>
+                <div>
+                    <p style="color: var(--text-muted);">Commute</p>
+                    <h2><span id="prof-commute">0</span> mins</h2>
+                </div>
+            </div>
+            
+            <button class="btn btn-danger" style="margin-top: 25px;" onclick="resetSystem()">Reset Data</button>
         </div>
     </div>
 
     <div id="setup-screen" class="overlay">
         <div class="modal">
             <h2>Welcome</h2>
-            <p>Enter your details to get started.</p>
-            <input type="text" id="name-input" placeholder="Your Name">
-            <input type="number" id="commute-input" placeholder="Commute (mins)">
-            <button class="btn" style="margin-top: 15px;" onclick="saveProfile()">Start</button>
+            <p>Let's set up your academic profile.</p>
+            
+            <label style="font-weight:600; font-size:0.9rem;">Your Section</label>
+            <select id="section-input">
+                <option value="C1">Section C1</option>
+                <option value="C2">Section C2</option>
+            </select>
+
+            <label style="font-weight:600; font-size:0.9rem;">Your Name</label>
+            <input type="text" id="name-input" placeholder="e.g. John Doe">
+            
+            <label style="font-weight:600; font-size:0.9rem;">Commute Time (mins)</label>
+            <input type="number" id="commute-input" placeholder="e.g. 45">
+            
+            <button class="btn" style="margin-top: 15px;" onclick="saveProfile()">Start Journey</button>
         </div>
     </div>
 
     <div id="task-modal" class="overlay">
         <div class="modal">
-            <h2 id="modal-class-name">Subject</h2>
-            <p>Add notes or homework for this class.</p>
-            <textarea id="task-input" rows="4" placeholder="E.g. Read Chapter 4..."></textarea>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn btn-outline" onclick="closeTaskModal()">Cancel</button>
-                <button class="btn" onclick="saveTask()">Save</button>
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <h2 id="modal-class-name" style="margin-top:0;">Subject</h2>
+                <button onclick="closeTaskModal()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
             </div>
+            <p style="color:var(--text-muted)">Manage tasks for this course.</p>
+            
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input type="text" id="new-todo-input" placeholder="Add a task..." style="margin:0;">
+                <button class="btn btn-sm" onclick="addTodoItem()" style="width:auto;">Add</button>
+            </div>
+
+            <div id="todo-list-container" style="max-height: 200px; overflow-y: auto;">
+                </div>
         </div>
     </div>
 
@@ -264,141 +375,256 @@
     </nav>
 
     <script>
-        // --- DATA ---
-        const ROUTINE = {
-            "Saturday": [{t: "8:30-11:30", n: "DBMS Lab", r: "604"}, {t: "1:00-2:30", n: "BFE", r: "901"}, {t: "2:30-4:00", n: "DBMS", r: "408"}],
-            "Sunday": [{t: "10:00-11:30", n: "Algorithms", r: "409"}, {t: "11:30-2:30", n: "Algorithms Lab", r: "608"}],
-            "Monday": [{t: "8:30-10:00", n: "MLADE", r: "613"}, {t: "10:00-11:30", n: "Algorithms", r: "510"}, {t: "11:30-2:30", n: "MML", r: "503"}, {t: "DO LAUCH", n: "BREAK", r: "Your wish"}, {t: "4:00-5:30", n: "BFE", r: "404"}],
-            "Tuesday": [{t: "10:00-11:30", n: "DBMS", r: "406"}, {t: "DO BREAKFAST", n: "BREAK", r: "Your wish"}, {t: "1:00-2:30", n: "MM", r: "406"}],
-            "Wednesday": [{t: "11:30-1:00", n: "MLADE", r: "510"}, {t:"1:00-2:30" ,n:"MM" ,r:"510"}]
+        // --- DATA CONFIGURATION ---
+        const API_KEY = "AIzaSyDdgAnun9h4dd9KUncxK4UooYdrU1IzjaQ"; 
+        
+        const ROUTINES = {
+            "C1": {
+                "Saturday": [{t: "1:00-2:30", n: "BFE", r: "901"}, {t: "2:30-4:00", n: "DBMS", r: "408"}],
+                "Sunday": [{t: "10:00-11:30", n: "Algorithms", r: "409"}, {t: "11:30-1:00", n: "MML", r: "503"}],
+                "Monday": [{t: "8:30-10:00", n: "MLADE", r: "613"}, {t: "10:00-11:30", n: "Algorithms", r: "510"}, {t: "11:30-2:30", n: "Algorithms Lab", r: "904"}, {t: "4:00-5:30", n: "BFE", r: "404"}],
+                "Tuesday": [{t: "10:00-11:30", n: "DBMS", r: "406"}, {t: "1:00-2:30", n: "MM", r: "406"}],
+                "Wednesday": [{t: "8:30-11:30", n: "DBMS Lab", r: "608"}, {t: "11:30-1:00", n: "MLADE", r: "510"}, {t:"1:00-2:30" ,n:"MM" ,r:"510"}]
+            },
+            "C2": {
+                "Saturday": [{t: "8:30-11:30", n: "DBMS Lab", r: "604"}, {t: "1:00-2:30", n: "BFE", r: "901"}, {t: "2:30-4:00", n: "DBMS", r: "408"}],
+                "Sunday": [{t: "10:00-11:30", n: "Algorithms", r: "409"}, {t: "11:30-2:30", n: "Algorithms Lab", r: "608"}],
+                "Monday": [{t: "8:30-10:00", n: "MLADE", r: "613"}, {t: "10:00-11:30", n: "Algorithms", r: "510"}, {t: "11:30-1:00", n: "MML", r: "503"}, {t: "4:00-5:30", n: "BFE", r: "404"}],
+                "Tuesday": [{t: "10:00-11:30", n: "DBMS", r: "406"}, {t: "1:00-2:30", n: "MM", r: "406"}],
+                "Wednesday": [{t: "11:30-1:00", n: "MLADE", r: "510"}, {t:"1:00-2:30" ,n:"MM" ,r:"510"}]
+            }
         };
 
         const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        let userSection = "C1"; 
+        let scheduleViewSection = "C1";
         let currentEditingClass = null;
+        let currentAIMode = 'relax';
 
         // --- INITIALIZATION ---
         window.onload = function() {
-            // Load Theme
+            // Theme
             const savedTheme = localStorage.getItem("aura_theme") || "light";
             applyTheme(savedTheme);
 
-            // Load Profile
+            // Profile & Setup
             if (!localStorage.getItem("aura_name")) {
                 document.getElementById("setup-screen").classList.add("active");
             } else {
+                userSection = localStorage.getItem("aura_section") || "C1";
+                scheduleViewSection = userSection; 
                 initApp();
             }
         };
 
         function initApp() {
+            checkFuelStatus(); // The "Eat First" logic
             updateDashboard();
-            renderRoutine();
+            renderRoutine(scheduleViewSection);
+            updateProfileView();
+            document.getElementById("search-section-label").innerText = userSection;
             setInterval(updateDashboard, 60000);
         }
 
-        // --- THEME LOGIC ---
+        // --- FUEL / EAT FIRST LOGIC ---
+        function checkFuelStatus() {
+            const now = new Date();
+            const dayName = DAYS[now.getDay()];
+            
+            // 1. Check if it's an off day (No classes today)
+            const todaysClasses = ROUTINES[userSection][dayName];
+            if (!todaysClasses || todaysClasses.length === 0) {
+                // It is an off day (e.g., Friday). Do NOT show fuel screen.
+                document.getElementById("fuel-screen").classList.remove("active");
+                return;
+            }
+
+            // 2. It's a class day. Check time logic.
+            const hours = now.getHours();
+            const dateStr = now.toDateString();
+            const overlay = document.getElementById("fuel-screen");
+            const title = document.getElementById("fuel-title");
+            const msg = document.getElementById("fuel-msg");
+
+            // Logic: 6-10 AM (Breakfast), 12-3 PM (Lunch)
+            let mealType = null;
+            if (hours >= 6 && hours < 11) mealType = "breakfast";
+            else if (hours >= 12 && hours < 15) mealType = "lunch";
+
+            if (mealType) {
+                const eaten = localStorage.getItem(`aura_ate_${mealType}_${dateStr}`);
+                if (!eaten) {
+                    overlay.classList.add("active");
+                    title.innerText = mealType === "breakfast" ? "Good Morning!" : "It's Lunch Time!";
+                    msg.innerText = `You have classes today in ${userSection}. Don't skip ${mealType}!`;
+                    return; 
+                }
+            }
+            
+            overlay.classList.remove("active");
+        }
+
+        function confirmMeal() {
+            const now = new Date();
+            const hours = now.getHours();
+            const dateStr = now.toDateString();
+            
+            let mealType = null;
+            if (hours >= 6 && hours < 11) mealType = "breakfast";
+            else if (hours >= 12 && hours < 15) mealType = "lunch";
+            
+            if(mealType) {
+                localStorage.setItem(`aura_ate_${mealType}_${dateStr}`, "true");
+                document.getElementById("fuel-screen").classList.remove("active");
+            }
+        }
+
+        // --- THEME ---
         function toggleTheme() {
             const html = document.documentElement;
-            const current = html.getAttribute("data-theme");
-            const next = current === "light" ? "dark" : "light";
+            const next = html.getAttribute("data-theme") === "light" ? "dark" : "light";
             applyTheme(next);
             localStorage.setItem("aura_theme", next);
         }
 
         function applyTheme(theme) {
             document.documentElement.setAttribute("data-theme", theme);
-            const sun = document.getElementById("icon-sun");
-            const moon = document.getElementById("icon-moon");
-            if(theme === 'dark') {
-                sun.classList.remove("hidden");
-                moon.classList.add("hidden");
-            } else {
-                sun.classList.add("hidden");
-                moon.classList.remove("hidden");
-            }
-        }
-
-        // --- NAVIGATION LOGIC (FIXED) ---
-        function switchView(viewName) {
-            // Hide all views
-            const views = ['dashboard', 'schedule', 'search', 'profile'];
-            views.forEach(v => {
-                document.getElementById('view-' + v).classList.add('hidden');
-                
-                // Fix: Standardized ID mapping for nav buttons
-                // view 'dashboard' -> id 'nav-dash'
-                // view 'schedule'  -> id 'nav-schedule'
-                // view 'search'    -> id 'nav-search'
-                // view 'profile'   -> id 'nav-profile'
-                
-                let btnId = 'nav-' + v;
-                if(v === 'dashboard') btnId = 'nav-dash';
-                
-                const btn = document.getElementById(btnId);
-                if(btn) btn.classList.remove('active');
-            });
-
-            // Show selected view
-            document.getElementById('view-' + viewName).classList.remove('hidden');
-            
-            // Highlight button
-            let activeBtnId = 'nav-' + viewName;
-            if(viewName === 'dashboard') activeBtnId = 'nav-dash';
-            document.getElementById(activeBtnId).classList.add('active');
-
-            // Re-render routine if switching to schedule to ensure updates
-            if(viewName === 'schedule') renderRoutine();
+            document.getElementById("icon-sun").classList.toggle("hidden", theme === "light");
+            document.getElementById("icon-moon").classList.toggle("hidden", theme === "dark");
         }
 
         // --- DASHBOARD LOGIC ---
         function updateDashboard() {
-            // Update Text
             const name = localStorage.getItem("aura_name");
-            const commute = localStorage.getItem("aura_commute");
             document.getElementById("greeting").innerText = `Hello, ${name}`;
-            document.getElementById("prof-name").innerText = name;
-            document.getElementById("prof-commute").innerText = commute;
+            document.getElementById("section-badge").innerText = `${userSection} Student`;
             
             const now = new Date();
             document.getElementById("today-info").innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-            // Next Class Logic
             const dayName = DAYS[now.getDay()];
-            const classes = ROUTINE[dayName] || [];
-            const currentMins = now.getHours() * 60 + now.getMinutes();
-
-            let nextClass = classes.find(c => {
-                const [h, m] = c.t.split(':');
-                return (parseInt(h) * 60 + parseInt(m)) > currentMins;
-            });
-
+            const classes = ROUTINES[userSection][dayName] || [];
             const display = document.getElementById("next-class-display");
-            if (nextClass) {
-                const [h, m] = nextClass.t.split(':');
-                const diff = (parseInt(h) * 60 + parseInt(m)) - currentMins;
+
+            // Off Day Check
+            if (classes.length === 0) {
                 display.innerHTML = `
-                    <h2 style="font-size:2.5rem; margin:10px 0; color:var(--primary);">${nextClass.t}</h2>
+                    <h2 style="color:var(--success);">Today is free!</h2>
+                    <p>No classes found for ${userSection} today.</p>
+                `;
+                return;
+            }
+
+            // Next Class Logic
+            const currentMins = now.getHours() * 60 + now.getMinutes();
+            let nextClass = classes.find(c => {
+                const [startTime] = c.t.split('-'); 
+                const [hStr, mStr] = startTime.split(':');
+                let h = parseInt(hStr);
+                if (h < 7) h += 12; // PM adjustment
+                return (h * 60 + parseInt(mStr)) > currentMins;
+            });
+            
+            if (nextClass) {
+                const [startTime] = nextClass.t.split('-');
+                const [hStr, mStr] = startTime.split(':');
+                let h = parseInt(hStr);
+                if (h < 7) h += 12;
+                
+                const diff = (h * 60 + parseInt(mStr)) - currentMins;
+                let color = diff < 15 ? "var(--danger)" : "var(--primary)";
+
+                display.innerHTML = `
+                    <h2 style="font-size:2.5rem; margin:10px 0; color:${color};">${nextClass.t}</h2>
                     <p style="font-size:1.2rem; font-weight:600;">${nextClass.n}</p>
                     <p style="color:var(--text-muted);">Room ${nextClass.r} • Starts in ${diff} min</p>
                 `;
             } else {
                 display.innerHTML = `
-                    <h2 style="color:var(--text-muted);">No classes left</h2>
-                    <p>You are free for the day!</p>
+                    <h2 style="color:var(--text-muted);">Done for today!</h2>
+                    <p>Relax and prepare for tomorrow.</p>
                 `;
             }
         }
 
-        // --- SCHEDULE & TASKS ---
-        function renderRoutine() {
+        // --- AI GEMINI INTEGRATION (IMPROVED) ---
+        function setAIMode(mode) {
+            currentAIMode = mode;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            document.getElementById('chip-' + mode).classList.add('active');
+        }
+
+        async function getAIAdvice() {
+            const responseDiv = document.getElementById("ai-response");
+            responseDiv.classList.remove("hidden");
+            responseDiv.innerHTML = `<div class="ai-loading">Connecting to Brain...</div>`;
+
+            let systemInstruction = "";
+            if (currentAIMode === 'relax') systemInstruction = "suggest a quick, unique 5-10 minute relaxation activity.";
+            if (currentAIMode === 'study') systemInstruction = "give a short, highly effective study tip.";
+            if (currentAIMode === 'motivate') systemInstruction = "give a short, powerful motivational quote.";
+
+            const prompt = `I am a student. Please ${systemInstruction} Keep it under 25 words. Be direct.`;
+
+            // Adding safety settings to prevent AI blocking simple requests
+            const safetySettings = [
+                { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+            ];
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: prompt }] }],
+                        safetySettings: safetySettings
+                    })
+                });
+                
+                if(!res.ok) throw new Error("API Error");
+                
+                const data = await res.json();
+                
+                // Safety check for empty response
+                if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+                    throw new Error("No response generated.");
+                }
+
+                const suggestion = data.candidates[0].content.parts[0].text;
+                
+                // Formatting markdown-style bolding
+                const formatted = suggestion.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                responseDiv.innerHTML = formatted;
+                
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div style="color:var(--danger)">This feature is not available or server is busy.</div>
+                    <button class="btn btn-sm btn-outline" style="margin-top:10px;" onclick="getAIAdvice()">Retry</button>
+                `;
+                console.error(error);
+            }
+        }
+
+        // --- SCHEDULE VIEW ---
+        function toggleScheduleView(section) {
+            scheduleViewSection = section;
+            document.getElementById("sched-toggle-c1").classList.toggle("active", section === "C1");
+            document.getElementById("sched-toggle-c2").classList.toggle("active", section === "C2");
+            renderRoutine(section);
+        }
+
+        function renderRoutine(section) {
             const list = document.getElementById("full-routine-list");
             list.innerHTML = "";
             
-            // Sort keys to ensure day order
+            const activeRoutine = ROUTINES[section];
             const dayOrder = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
             
             dayOrder.forEach(day => {
-                if(ROUTINE[day]) {
+                if(activeRoutine[day]) {
                     const header = document.createElement("h3");
                     header.innerText = day;
                     header.style.marginTop = "20px";
@@ -406,15 +632,19 @@
 
                     const card = document.createElement("div");
                     card.className = "card";
-                    card.style.padding = "0"; // Flush list
+                    card.style.padding = "0";
 
-                    ROUTINE[day].forEach(c => {
+                    activeRoutine[day].forEach(c => {
                         const row = document.createElement("div");
                         row.className = "class-item";
                         
-                        // Check for task
-                        const task = localStorage.getItem(`aura_task_${c.n}`);
-                        const badge = task ? `<span class="task-badge">Task</span>` : '';
+                        // Check tasks (Only show tasks if viewing OWN section)
+                        let badge = '';
+                        if(section === userSection) {
+                            const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${section}_${c.n}`) || "[]");
+                            const pending = tasks.filter(t => !t.done).length;
+                            if(pending > 0) badge = `<span class="task-badge">${pending}</span>`;
+                        }
 
                         row.innerHTML = `
                             <div>
@@ -423,7 +653,15 @@
                             </div>
                             <div style="font-weight:600; color:var(--primary)">${c.t}</div>
                         `;
-                        row.onclick = () => openTaskModal(c.n);
+                        
+                        // Strict Restriction: You can only open tasks for YOUR section
+                        if(section === userSection) {
+                            row.onclick = () => openTaskModal(c.n);
+                        } else {
+                            row.style.cursor = "default";
+                            row.onclick = () => alert("You can only manage tasks for your own section.");
+                        }
+
                         card.appendChild(row);
                     });
                     list.appendChild(card);
@@ -431,52 +669,148 @@
             });
         }
 
+        // --- ADVANCED TODO LIST ---
         function openTaskModal(className) {
             currentEditingClass = className;
             document.getElementById("modal-class-name").innerText = className;
-            document.getElementById("task-input").value = localStorage.getItem(`aura_task_${className}`) || "";
             document.getElementById("task-modal").classList.add("active");
+            renderTodoList();
         }
 
         function closeTaskModal() {
             document.getElementById("task-modal").classList.remove("active");
-        }
-
-        function saveTask() {
-            const val = document.getElementById("task-input").value;
-            if(val.trim()) {
-                localStorage.setItem(`aura_task_${currentEditingClass}`, val);
-            } else {
-                localStorage.removeItem(`aura_task_${currentEditingClass}`);
+            renderRoutine(scheduleViewSection); 
+            // Re-render search in case badge counts changed
+            if(!document.getElementById("view-search").classList.contains("hidden")) {
+                performSearch();
             }
-            closeTaskModal();
-            renderRoutine();
         }
 
-        // --- SEARCH ---
+        function renderTodoList() {
+            const container = document.getElementById("todo-list-container");
+            const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${userSection}_${currentEditingClass}`) || "[]");
+            
+            container.innerHTML = "";
+            if(tasks.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.9rem;">No tasks yet.</p>`;
+                return;
+            }
+
+            tasks.forEach((task, index) => {
+                const div = document.createElement("div");
+                div.className = `todo-item ${task.done ? 'completed' : ''}`;
+                div.innerHTML = `
+                    <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${index})">
+                    <span style="flex:1;">${task.text}</span>
+                    <button onclick="deleteTask(${index})" style="background:none; border:none; color:var(--danger); cursor:pointer;">&times;</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addTodoItem() {
+            const input = document.getElementById("new-todo-input");
+            const text = input.value.trim();
+            if(!text) return;
+
+            const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${userSection}_${currentEditingClass}`) || "[]");
+            tasks.push({ text: text, done: false });
+            localStorage.setItem(`aura_tasks_${userSection}_${currentEditingClass}`, JSON.stringify(tasks));
+            
+            input.value = "";
+            renderTodoList();
+        }
+
+        function toggleTask(index) {
+            const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${userSection}_${currentEditingClass}`) || "[]");
+            tasks[index].done = !tasks[index].done;
+            localStorage.setItem(`aura_tasks_${userSection}_${currentEditingClass}`, JSON.stringify(tasks));
+            renderTodoList();
+        }
+
+        function deleteTask(index) {
+            const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${userSection}_${currentEditingClass}`) || "[]");
+            tasks.splice(index, 1);
+            localStorage.setItem(`aura_tasks_${userSection}_${currentEditingClass}`, JSON.stringify(tasks));
+            renderTodoList();
+        }
+
+        // --- NAVIGATION & VIEWS ---
+        function switchView(viewName) {
+            ['dashboard', 'schedule', 'search', 'profile'].forEach(v => {
+                document.getElementById('view-' + v).classList.add('hidden');
+                let btnId = 'nav-' + (v === 'dashboard' ? 'dash' : v);
+                document.getElementById(btnId).classList.remove('active');
+            });
+            document.getElementById('view-' + viewName).classList.remove('hidden');
+            document.getElementById('nav-' + (viewName === 'dashboard' ? 'dash' : viewName)).classList.add('active');
+            
+            if(viewName === 'schedule') {
+                toggleScheduleView(userSection);
+            }
+        }
+
+        // --- SETUP & PROFILE ---
+        function saveProfile() {
+            const s = document.getElementById("section-input").value;
+            const n = document.getElementById("name-input").value;
+            const c = document.getElementById("commute-input").value;
+            
+            if(n && c) {
+                localStorage.setItem("aura_section", s);
+                localStorage.setItem("aura_name", n);
+                localStorage.setItem("aura_commute", c);
+                document.getElementById("setup-screen").classList.remove("active");
+                location.reload(); 
+            }
+        }
+
+        function updateProfileView() {
+            document.getElementById("prof-name").innerText = localStorage.getItem("aura_name");
+            document.getElementById("prof-section").innerText = localStorage.getItem("aura_section");
+            document.getElementById("prof-commute").innerText = localStorage.getItem("aura_commute");
+        }
+
+        function resetSystem() {
+            if(confirm("Reset all data? This deletes your tasks and profile.")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // --- SEARCH (RESTRICTED) ---
         function performSearch() {
             const q = document.getElementById("search-bar").value.toLowerCase();
             const res = document.getElementById("search-results");
             res.innerHTML = "";
-            
             if(q.length < 2) return;
 
-            const dayOrder = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+            // RESTRICTION: Only search the user's logged-in section
+            const targetSection = userSection; 
+
+            const dayOrder = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"];
             let found = false;
 
             dayOrder.forEach(day => {
-                if(ROUTINE[day]) {
-                    ROUTINE[day].forEach(c => {
+                if(ROUTINES[targetSection][day]) {
+                    ROUTINES[targetSection][day].forEach(c => {
                         if(c.n.toLowerCase().includes(q)) {
                             found = true;
                             const item = document.createElement("div");
                             item.className = "card";
+                            item.style.borderLeft = "4px solid var(--primary)";
+                            item.style.cursor = "pointer";
+                            
+                            // Click to open task modal (Feature Requirement)
+                            item.onclick = () => openTaskModal(c.n);
+
                             item.innerHTML = `
                                 <div style="display:flex; justify-content:space-between;">
                                     <strong>${c.n}</strong>
                                     <span style="color:var(--primary); font-weight:bold;">${c.t}</span>
                                 </div>
                                 <div style="color:var(--text-muted); margin-top:5px;">${day} • Room ${c.r}</div>
+                                <div style="font-size:0.8rem; color:var(--text-muted); margin-top:8px;">Tap to manage tasks</div>
                             `;
                             res.appendChild(item);
                         }
@@ -484,25 +818,8 @@
                 }
             });
 
-            if(!found) res.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No matching classes.</p>`;
-        }
-
-        // --- PROFILE ---
-        function saveProfile() {
-            const n = document.getElementById("name-input").value;
-            const c = document.getElementById("commute-input").value;
-            if(n && c) {
-                localStorage.setItem("aura_name", n);
-                localStorage.setItem("aura_commute", c);
-                document.getElementById("setup-screen").classList.remove("active");
-                initApp();
-            }
-        }
-
-        function resetSystem() {
-            if(confirm("Reset all data? This cannot be undone.")) {
-                localStorage.clear();
-                location.reload();
+            if(!found) {
+                res.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No classes found in ${userSection}.</p>`;
             }
         }
     </script>
