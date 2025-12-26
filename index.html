@@ -622,9 +622,9 @@ async function getAIAdvice() {
     responseDiv.innerHTML = `<div class="ai-loading">Connecting to Brain...</div>`;
 
     let systemInstruction = "";
-    if (currentAIMode === 'relax') systemInstruction = "suggest a quick, unique 5-10 minute relaxation activity with spirituality.";
-    else if (currentAIMode === 'study') systemInstruction = "give a short, highly effective study tip.";
-    else if (currentAIMode === 'motivate') systemInstruction = "give a short, powerful motivational quote.";
+    if (currentAIMode === 'relax') systemInstruction = "suggest a quick, unique 5-10 minute relaxation activity with spirituality in easy to understand language";
+    else if (currentAIMode === 'study') systemInstruction = "give a short, highly effective study tip in easy to understand language.";
+    else if (currentAIMode === 'motivate') systemInstruction = "give a short, powerful motivational quote in easy to understand language.";
     else systemInstruction = "give a helpful tip for a student.";
 
     const prompt = `I am a student. Please ${systemInstruction} Keep it under 25 words. Be direct.`;
