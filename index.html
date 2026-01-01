@@ -1,20 +1,10 @@
-<!-- 
-Thhis is full AI made code for Routine.html
-i tried to solve a problem which i faced in 3rd semester.
--->
-<!--
-    API on line 601
-    routine time on 391
-    notice 247
--->
-
-
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura AI - Academic Sentinel</title>
+    <title>Aura - Academic Sentinel v2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -29,6 +19,8 @@ i tried to solve a problem which i faced in 3rd semester.
             --nav-bg: #ffffff;
             --danger: #ef4444;
             --success: #10b981;
+            --info: #0ea5e9;
+            --warning: #f59e0b;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
@@ -63,17 +55,22 @@ i tried to solve a problem which i faced in 3rd semester.
 
         /* Header & Toggle */
         .top-bar {
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .theme-toggle {
             background: var(--surface);
             border: 1px solid var(--border);
             color: var(--text-main);
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             box-shadow: var(--shadow);
         }
@@ -81,7 +78,14 @@ i tried to solve a problem which i faced in 3rd semester.
         /* Typography */
         h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
         h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
-        h3 { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
         p { font-size: 0.95rem; line-height: 1.5; margin: 5px 0; }
 
         /* Cards */
@@ -95,96 +99,203 @@ i tried to solve a problem which i faced in 3rd semester.
             transition: 0.3s;
         }
 
+        /* Highlighted Class Styling */
+        .highlight-active {
+            border: 2px solid var(--success) !important;
+            background-color: rgba(16, 185, 129, 0.05) !important;
+            position: relative;
+            animation: pulse-border 2s infinite;
+        }
+
+        .highlight-tag {
+            background: var(--success);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: var(--success); }
+            50% { border-color: rgba(16, 185, 129, 0.4); }
+            100% { border-color: var(--success); }
+        }
+
         /* Inputs & Buttons */
         input, textarea, select {
-            width: 100%; padding: 14px; margin: 8px 0;
-            border-radius: 10px; border: 1px solid var(--border);
-            background: var(--bg); color: var(--text-main);
-            box-sizing: border-box; font-family: inherit; font-size: 1rem;
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text-main);
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 1rem;
         }
-        input:focus, textarea:focus, select:focus { outline: 2px solid var(--primary); border-color: transparent; }
+
+        input:focus, textarea:focus, select:focus {
+            outline: 2px solid var(--primary);
+            border-color: transparent;
+        }
 
         .btn {
-            background: var(--primary); color: var(--primary-fg);
-            border: none; padding: 14px; border-radius: 10px;
-            cursor: pointer; width: 100%; font-weight: 600; font-size: 1rem;
-            transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: var(--primary);
+            color: var(--primary-fg);
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
         }
+
         .btn:active { opacity: 0.8; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
         .btn-danger { background: var(--danger); color: white; }
         .btn-success { background: var(--success); color: white; }
+        .btn-info { background: var(--info); color: white; }
         .btn-sm { padding: 8px 12px; font-size: 0.85rem; width: auto; }
 
         /* Schedule Toggle */
         .toggle-container {
-            display: flex; background: var(--surface);
-            padding: 4px; border-radius: 12px; border: 1px solid var(--border);
+            display: flex;
+            background: var(--surface);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
             margin-bottom: 20px;
         }
+
         .toggle-btn {
-            flex: 1; padding: 8px; border: none; background: transparent;
-            color: var(--text-muted); font-weight: 600; cursor: pointer;
-            border-radius: 8px; transition: 0.2s;
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.2s;
         }
+
         .toggle-btn.active {
-            background: var(--primary); color: var(--primary-fg); shadow: var(--shadow);
+            background: var(--primary);
+            color: var(--primary-fg);
+            shadow: var(--shadow);
         }
 
         /* Navigation */
         nav {
-            position: fixed; bottom: 0; width: 100%;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
             background: var(--nav-bg);
-            display: flex; justify-content: space-around;
+            display: flex;
+            justify-content: space-around;
             padding: 12px 0;
             border-top: 1px solid var(--border);
             z-index: 100;
         }
+
         nav button {
-            background: none; border: none;
+            background: none;
+            border: none;
             color: var(--text-muted);
             font-size: 0.75rem;
-            display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; gap: 5px; font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            gap: 5px;
+            font-weight: 500;
         }
+
         nav button svg { width: 24px; height: 24px; fill: currentColor; }
         nav button.active { color: var(--primary); }
 
         /* List Items */
         .class-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px; border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
             cursor: pointer;
         }
+
         .class-item:last-child { border-bottom: none; }
         .class-item:active { background-color: var(--bg); }
-        
+
         .task-badge {
-            background: var(--primary); color: var(--primary-fg);
-            font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;
-            margin-left: 8px; font-weight: bold;
+            background: var(--primary);
+            color: var(--primary-fg);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            font-weight: bold;
         }
 
-        /* ToDo List Styling */
-        .todo-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 8px 0; border-bottom: 1px solid var(--border);
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
+
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .data-table th { background: var(--bg); font-weight: 600; }
+        .data-table tr:last-child td { border-bottom: none; }
+
+        /* ToDo List */
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
         .todo-item input[type="checkbox"] { width: 20px; height: 20px; margin: 0; }
         .todo-item.completed span { text-decoration: line-through; color: var(--text-muted); }
 
         /* Modals & Overlays */
         .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             display: flex; align-items: center; justify-content: center;
-            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            z-index: 1000;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
         }
+
         .overlay.active { opacity: 1; pointer-events: auto; }
-        
+
         .modal {
-            background: var(--surface); padding: 25px;
-            border-radius: 20px; width: 85%; max-width: 400px;
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 400px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
             position: relative;
         }
@@ -195,26 +306,14 @@ i tried to solve a problem which i faced in 3rd semester.
         .fuel-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
 
         .hidden { display: none !important; }
-        
-        /* AI Response Area */
-        #ai-response {
-            margin-top: 15px; padding: 15px; background: var(--bg);
-            border-radius: 12px; font-size: 0.95rem; 
-            border: 1px solid var(--border);
-            line-height: 1.6;
+
+        .admin-edit-btn {
+            background: none; border: none; cursor: pointer;
+            font-size: 1rem; color: var(--text-muted); float: right;
         }
-        .ai-loading { opacity: 0.6; animation: pulse 1.5s infinite; text-align: center; }
-        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
-        
-        .chip-container { display: flex; gap: 8px; margin-bottom: 10px; }
-        .chip {
-            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border);
-            background: var(--surface); font-size: 0.8rem; cursor: pointer;
-            transition: 0.2s;
-        }
-        .chip.active { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
     </style>
 </head>
+
 <body>
 
     <div id="fuel-screen" class="overlay">
@@ -234,6 +333,7 @@ i tried to solve a problem which i faced in 3rd semester.
             <div>
                 <h1 id="greeting">Hello</h1>
                 <p id="section-badge" style="font-size: 0.8rem; font-weight: 600; color: var(--primary); text-transform: uppercase;"></p>
+                <p id="version" style="font-size: 0.8rem; font-weight: 600; color: var(--primary); text-transform: uppercase;"></p>
                 <p id="today-info" style="color: var(--text-muted); font-size: 0.9rem;"></p>
             </div>
             <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
@@ -242,71 +342,83 @@ i tried to solve a problem which i faced in 3rd semester.
             </button>
         </div>
 
-
-
-
-
-
-
-
-
         <section class="card notice-card" id="notice-section">
-            <h1 style="color: var(--danger); margin-top: 0;">📢 Notice</h1>
-           <p id="manual-notice-text" style="font-size: 2rem; margin: 10px 0; color: #52ac6d; font-family: 'Arial Black', sans-serif;">ALL DBMS hobe, DBMSL দিহান জানে<br><br></p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h1 style="color: var(--danger); margin-top: 0; font-size:1.2rem;">📢 Notice</h1>
+            </div>
+            <p id="manual-notice-text" style="font-size: 1.2rem; margin: 10px 0; color: #52ac6d; font-family: 'Inter', sans-serif; font-weight:600;">
+                Loading notice...
+            </p>
         </section>
 
-
-
-
-
-
-
+        <section class="card" style="border-left: 4px solid var(--info);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; color: var(--info);">⏰ Sleep & Commute</h3>
+                <span id="commute-display-dash" style="font-size:0.8rem; color:var(--text-muted);"></span>
+            </div>
+            <div id="wakeup-display" style="margin-top: 10px;">
+                <p>Loading schedule...</p>
+            </div>
+        </section>
 
         <section class="card">
-            <h3>Up Next</h3>
+            <h3 id="up-next-title">Up Next</h3>
             <div id="next-class-display">
                 <h2 style="font-size: 2rem; margin: 10px 0;">Loading...</h2>
                 <p>Please wait...</p>
             </div>
         </section>
 
-        <!-- <section class="card" id="ai-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <h3 style="margin:0;">✨ AI Assistant(immature)</h3>
-                <span style="font-size:1rem; color:var(--danger)">Are you stack?</span>
-            </div>
-            
-            <p style="margin-bottom: 12px;">What kind of advice do you need?</p>
-            
-            <div class="chip-container">
-                <button class="chip active" id="chip-relax" onclick="setAIMode('relax')">🌴 Relax</button>
-                <button class="chip" id="chip-study" onclick="setAIMode('study')">📚 Study Tip</button>
-                <button class="chip" id="chip-motivate" onclick="setAIMode('motivate')">🔥 Motivation</button>
-            </div>
-
-            <button class="btn btn-outline" onclick="getAIAdvice()">
-                Ask AI
-            </button>
-            <div id="ai-response" class="hidden"></div>
-        </section> -->
+        <section class="card hidden" id="next-day-card">
+            <h3 style="color:var(--info);">Tomorrow's Plan</h3>
+            <div id="next-day-list"></div>
+        </section>
 
         <section class="card">
             <h3>Quick Actions</h3>
-            <button class="btn btn-outline" onclick="switchView('schedule')">View Full Schedule</button>
             <button class="btn btn-outline" onclick="switchView('search')" style="margin-top:10px;">Find My Class</button>
+            <a href="https://claude.ai/public/artifacts/52243743-54aa-4573-9906-f8a1f8cad87f" target="_blank" class="btn btn-info" style="margin-top:10px;">
+                📝 Question Bank(By Arman)
+            </a>
         </section>
     </div>
 
     <div id="view-schedule" class="container hidden">
         <h1 style="margin-bottom: 20px;">Weekly Schedule</h1>
-        
+
         <div class="toggle-container">
             <button id="sched-toggle-c1" class="toggle-btn" onclick="toggleScheduleView('C1')">Section C1</button>
             <button id="sched-toggle-c2" class="toggle-btn" onclick="toggleScheduleView('C2')">Section C2</button>
         </div>
 
         <div id="full-routine-list"></div>
-        <div style="height: 50px;"></div> 
+        <div style="height: 50px;"></div>
+    </div>
+
+    <div id="view-courses" class="container hidden">
+        <h1 style="margin-bottom: 20px;">Course Details</h1>
+        <div class="card" style="padding:0; overflow:hidden;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Code</th>
+                        <th>Teacher / Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>BFE</td><td>BIO 2101</td><td>Joinul Abedin (C1 & C2)</td></tr>
+                    <tr><td>DBMS</td><td>CSE 2221</td><td>Raisul Islam (C1 & C2)</td></tr>
+                    <tr><td>DBMS Lab</td><td>CSE 2222</td><td>Raisul Islam (C1)<br><span style="color:var(--danger); font-size:0.8rem;">C2 Pending</span></td></tr>
+                    <tr><td>Algorithms</td><td>CSE 2415</td><td>Noortaz Rezuana (C1 & C2)</td></tr>
+                    <tr><td>Algo Lab</td><td>CSE 2416</td><td>Noortaz Rezuana (C1 & C2)</td></tr>
+                    <tr><td>MM</td><td>CSE 3815</td><td>Rezaur Rahman Chowdhury</td></tr>
+                    <tr><td>MM Lab</td><td>CSE 3816</td><td>Rezaur Rahman Chowdhury</td></tr>
+                    <tr><td>MLADE</td><td>MAT 2207</td><td>N.U.M Akramul Kabir Khan</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-outline" onclick="switchView('dashboard')">Back to Home</button>
     </div>
 
     <div id="view-search" class="container hidden">
@@ -322,23 +434,35 @@ i tried to solve a problem which i faced in 3rd semester.
 
     <div id="view-profile" class="container hidden">
         <h1 style="margin-bottom: 20px;">Profile</h1>
-        <div class="card">
-            <p style="color: var(--text-muted);">Name</p>
-            <h2 id="prof-name">Student</h2>
-            <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
-            
-            <div style="display: flex; gap: 20px;">
-                <div>
-                    <p style="color: var(--text-muted);">Section</p>
-                    <h2 id="prof-section">C1</h2>
-                </div>
-                <div>
-                    <p style="color: var(--text-muted);">Commute</p>
-                    <h2><span id="prof-commute">0</span> mins</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="card" style="grid-column: span 2; margin-bottom: 0;">
+                <p style="color: var(--text-muted);">Name</p>
+                <h2 id="prof-name">Student</h2>
+                <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
+                
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;">Section</p>
+                        <h2 id="prof-section" style="margin:0;">C1</h2>
+                    </div>
+                    <div>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;">Commute</p>
+                        <h2 style="margin:0;"><span id="prof-commute">0</span>m</h2>
+                    </div>
                 </div>
             </div>
-            
-            <button class="btn btn-danger" style="margin-top: 25px;" onclick="resetSystem()">Reset Data</button>
+            all rights reserved
+
+            <button class="btn btn-outline" style="height: 100%; flex-direction: column; gap: 5px;" onclick="openAdminModal()">
+                <span style="font-size: 1.5rem;">⚠️</span>
+                <span>Admin<br>Panel</span>
+            </button>
+
+            <button class="btn btn-danger" style="height: 100%; flex-direction: column; gap: 5px;" onclick="resetSystem()">
+                <span style="font-size: 1.5rem;">🗑️</span>
+                <span>Reset<br>Data</span>
+            </button>
         </div>
     </div>
 
@@ -346,7 +470,7 @@ i tried to solve a problem which i faced in 3rd semester.
         <div class="modal">
             <h2>Welcome</h2>
             <p>Let's set up your academic profile.</p>
-            
+
             <label style="font-weight:600; font-size:0.9rem;">Your Section</label>
             <select id="section-input">
                 <option value="C1">Section C1</option>
@@ -355,11 +479,33 @@ i tried to solve a problem which i faced in 3rd semester.
 
             <label style="font-weight:600; font-size:0.9rem;">Your Name</label>
             <input type="text" id="name-input" placeholder="e.g. Masud">
-            
-            <label style="font-weight:600; font-size:0.9rem;">Total time to get to class(mins)</label>
+
+            <label style="font-weight:600; font-size:0.9rem;">Total time to get to class (mins)</label>
             <input type="number" id="commute-input" placeholder="e.g. 45">
-            
+
             <button class="btn" style="margin-top: 15px;" onclick="saveProfile()">Start Journey</button>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="overlay">
+        <div class="modal">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <h2 style="margin-top:0;">Admin Access</h2>
+                <button onclick="document.getElementById('admin-modal').classList.remove('active')"
+                    style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+
+            <div id="admin-login-view">
+                <p>Enter password to update notice.</p>
+                <input type="password" id="admin-pass-input" placeholder="Password">
+                <button class="btn btn-primary" onclick="checkAdminLogin()">Login</button>
+            </div>
+
+            <div id="admin-editor-view" class="hidden">
+                <p>Update Notice Board</p>
+                <textarea id="admin-notice-text" rows="4"></textarea>
+                <button class="btn btn-success" onclick="saveAdminNotice()">Update Notice</button>
+            </div>
         </div>
     </div>
 
@@ -367,124 +513,106 @@ i tried to solve a problem which i faced in 3rd semester.
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:start;">
                 <h2 id="modal-class-name" style="margin-top:0;">Subject</h2>
-                <button onclick="closeTaskModal()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+                <button onclick="closeTaskModal()"
+                    style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
             </div>
             <p style="color:var(--text-muted)">Manage tasks for this course.</p>
-            
+
             <div style="display:flex; gap:10px; margin-bottom:15px;">
                 <input type="text" id="new-todo-input" placeholder="Add a task..." style="margin:0;">
                 <button class="btn btn-sm" onclick="addTodoItem()" style="width:auto;">Add</button>
             </div>
 
-            <div id="todo-list-container" style="max-height: 200px; overflow-y: auto;">
-                </div>
+            <div id="todo-list-container" style="max-height: 200px; overflow-y: auto;"></div>
         </div>
     </div>
 
     <nav>
         <button id="nav-dash" class="active" onclick="switchView('dashboard')">
-            <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" /></svg>
             Home
         </button>
         <button id="nav-schedule" onclick="switchView('schedule')">
-            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" /></svg>
             Schedule
         </button>
         <button id="nav-search" onclick="switchView('search')">
-            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" /></svg>
             Search
         </button>
+
+
+
+
+
+
+
+
+        <button id="nav-profile" onclick="switchView('courses')">
+            <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM10 10c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-4 4h8c0-1.33-2.67-2-4-2s-4 .67-4 2z" /></svg>
+            Teachers List
+        </button>
+
+
+
+
+
+
+
+
         <button id="nav-profile" onclick="switchView('profile')">
-            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
             Profile
         </button>
     </nav>
 
     <script>
-
-        
-const ROUTINES = {
-    "C1": {
-        "Saturday": [
-            { t: "1:00-2:30", n: "BFE", r: "901" },
-            { t: "2:30-4:00", n: "DBMS", r: "408" }
-        ],
-        "Sunday": [
-            { t: "10:00-11:30", n: "Algorithms", r: "409" },
-            { t: "11:30-2:30", n: "MML", r: "503" }
-        ],
-        "Monday": [
-            { t: "10:00-11:30", n: "Algorithms", r: "510" },
-            { t: "11:30-2:30", n: "Algorithms Lab", r: "904" },
-            { t: "2:30-4:00", n: "BREAK", r: "DO LUNCH", color: "red" }, 
-            { t: "4:00-5:30", n: "BFE", r: "404" }
-        ],
-        "Tuesday": [
-            { t: "10:00-11:30", n: "DBMS", r: "406" },
-            { t: "11:30-1:00", n: "MLADE", r: "610" }, 
-            { t: "1:00-2:30", n: "MM", r: "406" }
-        ],
-        "Wednesday": [
-            { t: "8:30-11:30", n: "DBMS Lab", r: "608" },
-            { t: "11:30-1:00", n: "MLADE", r: "510" },
-            { t: "1:00-2:30", n: "MM", r: "510" }
-        ]
-    },
-    "C2": {
-        "Saturday": [
-            { t: "8:30-11:30", n: "DBMS Lab", r: "604" },
-            { t: "11:30-1:00", n: "BREAK", r: "DO BREAKFAST", color: "red" },
-            { t: "1:00-2:30", n: "BFE", r: "901" },
-            { t: "2:30-4:00", n: "DBMS", r: "408" }
-        ],
-        "Sunday": [
-            { t: "10:00-11:30", n: "Algorithms", r: "409" },
-            { t: "11:30-2:30", n: "Algorithms Lab", r: "608" }
-        ],
-        "Monday": [
-            { t: "10:00-11:30", n: "Algorithms", r: "510" },
-            { t: "11:30-2:30", n: "MML", r: "503" },
-            { t: "2:30-4:00", n: "BREAK", r: "DO LUNCH", color: "red" },
-            { t: "4:00-5:30", n: "BFE", r: "404" }
-        ],
-        "Tuesday": [
-            { t: "10:00-11:30", n: "DBMS", r: "406" },
-            { t: "11:30-1:00", n: "MLADE", r: "610" },
-            { t: "1:00-2:30", n: "MM", r: "406" }
-        ],
-        "Wednesday": [
-            { t: "11:30-1:00", n: "MLADE", r: "510" },
-            { t: "1:00-2:30", n: "MM", r: "510" }
-        ]
-    }
-};
+        // --- DATA ---
+        const ROUTINES = {
+            "C1": {
+                "Saturday": [{ t: "13:00-14:30", n: "BFE", r: "901" }, { t: "14:30-16:00", n: "DBMS", r: "408" }],
+                "Sunday": [{ t: "10:00-11:30", n: "Algorithms", r: "409" }, { t: "11:30-14:30", n: "MML", r: "503" }],
+                "Monday": [{ t: "10:00-11:30", n: "Algorithms", r: "510" }, { t: "11:30-14:30", n: "Algorithms Lab", r: "904" }, { t: "14:30-16:00", n: "BREAK", r: "LUNCH", color: "red" }, { t: "16:00-17:30", n: "BFE", r: "404" }],
+                "Tuesday": [{ t: "10:00-11:30", n: "DBMS", r: "406" }, { t: "11:30-13:00", n: "MLADE", r: "610" }, { t: "13:00-14:30", n: "MM", r: "406" }],
+                "Wednesday": [{ t: "08:30-11:30", n: "DBMS Lab", r: "608" }, { t: "11:30-13:00", n: "MLADE", r: "510" }, { t: "13:00-14:30", n: "MM", r: "510" }]
+            },
+            "C2": {
+                "Saturday": [{ t: "08:30-11:30", n: "DBMS Lab", r: "604" }, { t: "11:30-13:00", n: "BREAK", r: "BREAKFAST", color: "red" }, { t: "13:00-14:30", n: "BFE", r: "901" }, { t: "14:30-16:00", n: "DBMS", r: "408" }],
+                "Sunday": [{ t: "10:00-11:30", n: "Algorithms", r: "409" }, { t: "11:30-14:30", n: "Algorithms Lab", r: "608" }],
+                "Monday": [{ t: "10:00-11:30", n: "Algorithms", r: "510" }, { t: "11:30-14:30", n: "MML", r: "503" }, { t: "14:30-16:00", n: "BREAK", r: "LUNCH", color: "red" }, { t: "16:00-17:30", n: "BFE", r: "404" }],
+                "Tuesday": [{ t: "10:00-11:30", n: "DBMS", r: "406" }, { t: "11:30-13:00", n: "MLADE", r: "610" }, { t: "13:00-14:30", n: "MM", r: "406" }],
+                "Wednesday": [{ t: "11:30-13:00", n: "MLADE", r: "510" }, { t: "13:00-14:30", n: "MM", r: "510" }]
+            }
+        };
 
         const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        let userSection = "C1"; 
+        let userSection = "C1";
         let scheduleViewSection = "C1";
         let currentEditingClass = null;
-        let currentAIMode = 'relax';
 
         // --- INITIALIZATION ---
-        window.onload = function() {
+        window.onload = function () {
             // Theme
             const savedTheme = localStorage.getItem("aura_theme") || "light";
             applyTheme(savedTheme);
+
+            // Notice
+            loadNotice();
 
             // Profile & Setup
             if (!localStorage.getItem("aura_name")) {
                 document.getElementById("setup-screen").classList.add("active");
             } else {
                 userSection = localStorage.getItem("aura_section") || "C1";
-                scheduleViewSection = userSection; 
+                scheduleViewSection = userSection;
                 initApp();
             }
         };
 
         function initApp() {
-            checkFuelStatus(); // The "Eat First" logic
+            checkFuelStatus();
             updateDashboard();
-            renderRoutine(scheduleViewSection);
+            renderRoutine(scheduleViewSection, "full-routine-list");
             updateProfileView();
             document.getElementById("search-section-label").innerText = userSection;
             setInterval(updateDashboard, 60000);
@@ -494,23 +622,14 @@ const ROUTINES = {
         function checkFuelStatus() {
             const now = new Date();
             const dayName = DAYS[now.getDay()];
-            
-            // 1. Check if it's an off day (No classes today)
             const todaysClasses = ROUTINES[userSection][dayName];
-            if (!todaysClasses || todaysClasses.length === 0) {
-                // It is an off day (e.g., Friday). Do NOT show fuel screen.
-                document.getElementById("fuel-screen").classList.remove("active");
-                return;
-            }
 
-            // 2. It's a class day. Check time logic.
+            if (!todaysClasses || todaysClasses.length === 0) return;
+
             const hours = now.getHours();
             const dateStr = now.toDateString();
             const overlay = document.getElementById("fuel-screen");
-            const title = document.getElementById("fuel-title");
-            const msg = document.getElementById("fuel-msg");
 
-            // Logic: 6-10 AM (Breakfast), 12-3 PM (Lunch)
             let mealType = null;
             if (hours >= 6 && hours < 11) mealType = "breakfast";
             else if (hours >= 12 && hours < 15) mealType = "lunch";
@@ -519,42 +638,51 @@ const ROUTINES = {
                 const eaten = localStorage.getItem(`aura_ate_${mealType}_${dateStr}`);
                 if (!eaten) {
                     overlay.classList.add("active");
-                    title.innerText = mealType === "breakfast" ? "Good Morning!" : "It's Lunch Time!";
-                    msg.innerText = `You have classes today in ${userSection}. Don't skip ${mealType}!`;
-                    return; 
+                    document.getElementById("fuel-title").innerText = mealType === "breakfast" ? "Good Morning!" : "It's Lunch Time!";
+                    document.getElementById("fuel-msg").innerText = `Classes today in ${userSection}. Don't skip ${mealType}!`;
+                    return;
                 }
             }
-            
             overlay.classList.remove("active");
         }
 
         function confirmMeal() {
             const now = new Date();
             const hours = now.getHours();
-            const dateStr = now.toDateString();
-            
-            let mealType = null;
-            if (hours >= 6 && hours < 11) mealType = "breakfast";
-            else if (hours >= 12 && hours < 15) mealType = "lunch";
-            
-            if(mealType) {
-                localStorage.setItem(`aura_ate_${mealType}_${dateStr}`, "true");
-                document.getElementById("fuel-screen").classList.remove("active");
+            let mealType = (hours >= 6 && hours < 11) ? "breakfast" : "lunch";
+            localStorage.setItem(`aura_ate_${mealType}_${now.toDateString()}`, "true");
+            document.getElementById("fuel-screen").classList.remove("active");
+        }
+
+        // --- ADMIN PANEL LOGIC ---
+        function openAdminModal() {
+            document.getElementById("admin-modal").classList.add("active");
+            document.getElementById("admin-login-view").classList.remove("hidden");
+            document.getElementById("admin-editor-view").classList.add("hidden");
+            document.getElementById("admin-pass-input").value = "";
+        }
+
+        function checkAdminLogin() {
+            const pass = document.getElementById("admin-pass-input").value;
+            if (pass === "AAJ2025") {
+                document.getElementById("admin-login-view").classList.add("hidden");
+                document.getElementById("admin-editor-view").classList.remove("hidden");
+                document.getElementById("admin-notice-text").value = localStorage.getItem("aura_notice") || "ALL DBMS hobe, DBMSL দিহান জানে";
+            } else {
+                alert("Incorrect Password");
             }
         }
 
-        // --- THEME ---
-        function toggleTheme() {
-            const html = document.documentElement;
-            const next = html.getAttribute("data-theme") === "light" ? "dark" : "light";
-            applyTheme(next);
-            localStorage.setItem("aura_theme", next);
+        function saveAdminNotice() {
+            const text = document.getElementById("admin-notice-text").value;
+            localStorage.setItem("aura_notice", text);
+            loadNotice();
+            document.getElementById("admin-modal").classList.remove("active");
         }
 
-        function applyTheme(theme) {
-            document.documentElement.setAttribute("data-theme", theme);
-            document.getElementById("icon-sun").classList.toggle("hidden", theme === "light");
-            document.getElementById("icon-moon").classList.toggle("hidden", theme === "dark");
+        function loadNotice() {
+            const text = localStorage.getItem("aura_notice") || "<h1><b>ALL DBMS hobe, DBMSL দিহান জানে</b></h1>";
+            document.getElementById("manual-notice-text").innerHTML = text.replace(/\n/g, "<br>");
         }
 
         // --- DASHBOARD LOGIC ---
@@ -562,144 +690,126 @@ const ROUTINES = {
             const name = localStorage.getItem("aura_name");
             document.getElementById("greeting").innerText = `Hello, ${name}`;
             document.getElementById("section-badge").innerText = `${userSection} Student`;
-            
+            document.getElementById("version").innerText = `v1.1`;
+
             const now = new Date();
             document.getElementById("today-info").innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
             const dayName = DAYS[now.getDay()];
             const classes = ROUTINES[userSection][dayName] || [];
             const display = document.getElementById("next-class-display");
-
-            // Off Day Check
-            if (classes.length === 0) {
-                display.innerHTML = `
-                    <h2 style="color:var(--success);">Today is free!</h2>
-                    <p>No classes found for ${userSection} today.</p>
+            const nextDayCard = document.getElementById("next-day-card");
+            
+            // Wake Up Info
+            const commute = parseInt(localStorage.getItem("aura_commute") || "0");
+            document.getElementById("commute-display-dash").innerText = `Commute: ${commute}m`;
+            
+            const wakeDisplay = document.getElementById("wakeup-display");
+            if (classes.length > 0) {
+                // Get time of first class
+                const firstClass = classes[0].t.split('-')[0]; // "13:00"
+                const [h, m] = firstClass.split(':').map(Number);
+                const classMins = h * 60 + m;
+                // Subtract Commute + 60 mins Prep
+                const wakeMins = classMins - commute - 60; 
+                
+                const wakeH = Math.floor(wakeMins / 60);
+                const wakeM = wakeMins % 60;
+                
+                // Format nicely
+                const wakeTimeStr = `${wakeH > 12 ? wakeH-12 : wakeH}:${wakeM.toString().padStart(2, '0')} ${wakeH >= 12 ? 'PM' : 'AM'}`;
+                
+                wakeDisplay.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:1.8rem;">🛌</span>
+                        <div>
+                            <div style="font-weight:700; font-size:1.1rem;">Wake up at ${wakeTimeStr}</div>
+                            <div style="font-size:0.85rem; color:var(--text-muted);">For ${firstClass} class (1h prep + ${commute}m travel)</div>
+                        </div>
+                    </div>
                 `;
-                return;
+            } else {
+                wakeDisplay.innerHTML = `<p style="color:var(--text-muted);">No classes today. Sleep in! 😴</p>`;
             }
 
-            // Next Class Logic
+            nextDayCard.classList.add("hidden"); 
+
+            // 1. Convert Current Time
             const currentMins = now.getHours() * 60 + now.getMinutes();
+
+            // 2. Find Next Class Today
             let nextClass = classes.find(c => {
-                const [startTime] = c.t.split('-'); 
+                const [startTime] = c.t.split('-');
                 const [hStr, mStr] = startTime.split(':');
-                let h = parseInt(hStr);
-                if (h < 7) h += 12; // PM adjustment
+                let h = parseInt(hStr); 
                 return (h * 60 + parseInt(mStr)) > currentMins;
             });
-            
+
             if (nextClass) {
                 const [startTime] = nextClass.t.split('-');
                 const [hStr, mStr] = startTime.split(':');
-                let h = parseInt(hStr);
-                if (h < 7) h += 12;
-                
-                const diff = (h * 60 + parseInt(mStr)) - currentMins;
+                const diff = (parseInt(hStr) * 60 + parseInt(mStr)) - currentMins;
                 let color = diff < 15 ? "var(--danger)" : "var(--primary)";
 
+                document.getElementById("up-next-title").innerText = "Up Next";
                 display.innerHTML = `
                     <h2 style="font-size:2.5rem; margin:10px 0; color:${color};">${nextClass.t}</h2>
                     <p style="font-size:1.2rem; font-weight:600;">${nextClass.n}</p>
-                    <p style="color:var(--text-muted);">Room ${nextClass.r} • Starts in ${Math.floor(diff/60)} h ${diff%60} min</p>
+                    <p style="color:var(--text-muted);">Room ${nextClass.r} • Starts in ${Math.floor(diff / 60)}h ${diff % 60}m</p>
                 `;
             } else {
+                document.getElementById("up-next-title").innerText = "Status";
                 display.innerHTML = `
                     <h2 style="color:var(--text-muted);">Done for today!</h2>
                     <p>Relax and prepare for tomorrow.</p>
                 `;
+
+                // Calculate Next Day
+                let nextDayIndex = (now.getDay() + 1) % 7;
+                let loops = 0;
+                while ((!ROUTINES[userSection][DAYS[nextDayIndex]] || ROUTINES[userSection][DAYS[nextDayIndex]].length === 0) && loops < 7) {
+                    nextDayIndex = (nextDayIndex + 1) % 7;
+                    loops++;
+                }
+
+                const nextDayName = DAYS[nextDayIndex];
+                const nextDayClasses = ROUTINES[userSection][nextDayName];
+
+                if (nextDayClasses && nextDayClasses.length > 0) {
+                    nextDayCard.classList.remove("hidden");
+                    nextDayCard.querySelector("h3").innerText = `Upcoming: ${nextDayName}`;
+                    const listContainer = document.getElementById("next-day-list");
+                    listContainer.innerHTML = "";
+                    nextDayClasses.forEach(c => {
+                        const div = document.createElement("div");
+                        div.style.padding = "10px";
+                        div.style.borderBottom = "1px solid var(--border)";
+                        div.innerHTML = `<b>${c.t}</b> - ${c.n} <small>(${c.r})</small>`;
+                        listContainer.appendChild(div);
+                    });
+                }
             }
         }
 
-const API_KEY = "AIzaSyAfSubDOl3JfB5Q-UK8-qhPL58u2gPwpHQ"; // Your Key
-
-// TRY THESE MODELS IF ONE FAILS:
-// 1. "gemini-1.5-flash-latest" (Fastest, newest)
-// 2. "gemini-1.5-flash-001"    (Specific version)
-// 3. "gemini-pro"               (Older, most stable standard)
-
-const MODEL_NAME = "gemini-2.5-flash";
-
- currentAIMode = 'study'; 
-
-function setAIMode(mode) {
-    currentAIMode = mode;
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    const activeChip = document.getElementById('chip-' + mode);
-    if (activeChip) activeChip.classList.add('active');
-}
-
-async function getAIAdvice() {
-    const responseDiv = document.getElementById("ai-response");
-    responseDiv.classList.remove("hidden");
-    responseDiv.innerHTML = `<div class="ai-loading">Connecting to Brain...</div>`;
-
-    let systemInstruction = "";
-    if (currentAIMode === 'relax') systemInstruction = "suggest a quick, unique 5-10 minute relaxation activity with spirituality in easy to understand language";
-    else if (currentAIMode === 'study') systemInstruction = "give a short, highly effective study tip in easy to understand language.";
-    else if (currentAIMode === 'motivate') systemInstruction = "give a short, powerful motivational quote in easy to understand language.";
-    else systemInstruction = "give a helpful tip for a student.";
-
-    const prompt = `I am a student. Please ${systemInstruction} Keep it under 25 words. Be direct.`;
-
-    const safetySettings = [
-        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
-        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
-        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
-        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
-    ];
-
-    try {
-        // USING THE MODEL_NAME VARIABLE HERE
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
-        
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                contents: [{ parts: [{ text: prompt }] }],
-                safetySettings: safetySettings
-            })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            console.error("API ERROR:", data);
-            throw new Error(data.error?.message || `API Error: ${res.status}`);
-        }
-
-        if (!data.candidates || data.candidates.length === 0) {
-            throw new Error("No response generated.");
-        }
-
-        const suggestion = data.candidates[0].content.parts[0].text;
-        const formatted = suggestion.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        responseDiv.innerHTML = formatted;
-        
-    } catch (error) {
-        console.error(error);
-        responseDiv.innerHTML = `<div style="color:red">Error: ${error.message}</div>`;
-    }
-}
-
-        // --- SCHEDULE VIEW ---
+        // --- ROUTINE RENDERING (WITH HIGHLIGHT) ---
         function toggleScheduleView(section) {
             scheduleViewSection = section;
             document.getElementById("sched-toggle-c1").classList.toggle("active", section === "C1");
             document.getElementById("sched-toggle-c2").classList.toggle("active", section === "C2");
-            renderRoutine(section);
+            renderRoutine(section, "full-routine-list");
         }
 
-        function renderRoutine(section) {
-            const list = document.getElementById("full-routine-list");
+        function renderRoutine(section, containerId) {
+            const list = document.getElementById(containerId);
             list.innerHTML = "";
-            
             const activeRoutine = ROUTINES[section];
-            const dayOrder = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
             
-            dayOrder.forEach(day => {
-                if(activeRoutine[day]) {
+            const now = new Date();
+            const currentDayName = DAYS[now.getDay()];
+            const currentMins = now.getHours() * 60 + now.getMinutes();
+
+            ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"].forEach(day => {
+                if (activeRoutine[day]) {
                     const header = document.createElement("h3");
                     header.innerText = day;
                     header.style.marginTop = "20px";
@@ -712,43 +822,50 @@ async function getAIAdvice() {
                     activeRoutine[day].forEach(c => {
                         const row = document.createElement("div");
                         row.className = "class-item";
-                        
-                        // Check tasks (Only show tasks if viewing OWN section)
                         let badge = '';
-                        if(section === userSection) {
+                        let highlightClass = '';
+                        let activeTag = '';
+
+                        // HIGHLIGHT LOGIC
+                        if (day === currentDayName && section === userSection) {
+                            const [startStr, endStr] = c.t.split('-');
+                            const [sh, sm] = startStr.split(':').map(Number);
+                            const [eh, em] = endStr.split(':').map(Number);
+                            
+                            const sMins = sh * 60 + sm;
+                            const eMins = eh * 60 + em;
+
+                            // Highlight if currently active OR upcoming within 30 mins
+                            if ((currentMins >= sMins && currentMins < eMins) || (currentMins < sMins && currentMins >= sMins - 30)) {
+                                highlightClass = 'highlight-active';
+                                activeTag = `<span class="highlight-tag">Active</span>`;
+                            }
+                        }
+
+                        // Task Count Badge
+                        if (section === userSection) {
                             const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${section}_${c.n}`) || "[]");
                             const pending = tasks.filter(t => !t.done).length;
-                            if(pending > 0) badge = `<span class="task-badge">${pending}</span>`;
+                            if (pending > 0) badge = `<span class="task-badge">${pending}</span>`;
                         }
 
-                        // Check if a specific color is defined, otherwise use the default primary color
-                        const displayColor = c.color ? c.color : "var(--primary)";
-
-                        // Apply styling to the row container
+                        const displayColor = c.color || "var(--primary)";
                         row.style.borderLeft = c.color ? `4px solid ${c.color}` : "none";
-                        if (c.color) {
-                            row.style.backgroundColor = "rgba(255, 0, 0, 0.05)"; // Very light red background
-                        }
+                        if (c.color) row.style.backgroundColor = "rgba(255, 0, 0, 0.05)";
+
+                        // Apply Highlight
+                        if(highlightClass) row.classList.add(highlightClass);
 
                         row.innerHTML = `
                             <div>
-                                <div style="font-weight:700; font-size:1rem; color: ${displayColor};">
-                                    ${c.n} ${badge}
-                                </div>
+                                <div style="font-weight:700; font-size:1rem; color: ${displayColor};">${c.n} ${badge} ${activeTag}</div>
                                 <div style="color:var(--text-muted); font-size:0.9rem;">${c.r}</div>
                             </div>
-                            <div style="font-weight:700; color: ${displayColor};">
-                                ${c.t}
-                            </div>
+                            <div style="font-weight:700; color: ${displayColor};">${c.t}</div>
                         `;
-                        
-                        // Strict Restriction: You can only open tasks for YOUR section
-                        if(section === userSection) {
-                            row.onclick = () => openTaskModal(c.n);
-                        } else {
-                            row.style.cursor = "default";
-                            row.onclick = () => alert("You can only manage tasks for your own section.");
-                        }
+
+                        if (section === userSection) row.onclick = () => openTaskModal(c.n);
+                        else row.style.cursor = "default";
 
                         card.appendChild(row);
                     });
@@ -757,7 +874,7 @@ async function getAIAdvice() {
             });
         }
 
-        // --- ADVANCED TODO LIST ---
+        // --- TASK MANAGEMENT ---
         function openTaskModal(className) {
             currentEditingClass = className;
             document.getElementById("modal-class-name").innerText = className;
@@ -767,20 +884,17 @@ async function getAIAdvice() {
 
         function closeTaskModal() {
             document.getElementById("task-modal").classList.remove("active");
-            renderRoutine(scheduleViewSection); 
-            // Re-render search in case badge counts changed
-            if(!document.getElementById("view-search").classList.contains("hidden")) {
-                performSearch();
-            }
+            renderRoutine(scheduleViewSection, "full-routine-list");
+            if (!document.getElementById("view-search").classList.contains("hidden")) performSearch();
         }
 
         function renderTodoList() {
             const container = document.getElementById("todo-list-container");
             const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${userSection}_${currentEditingClass}`) || "[]");
-            
             container.innerHTML = "";
-            if(tasks.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.9rem;">No tasks yet.</p>`;
+
+            if (tasks.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No tasks yet.</p>`;
                 return;
             }
 
@@ -799,12 +913,10 @@ async function getAIAdvice() {
         function addTodoItem() {
             const input = document.getElementById("new-todo-input");
             const text = input.value.trim();
-            if(!text) return;
-
+            if (!text) return;
             const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${userSection}_${currentEditingClass}`) || "[]");
             tasks.push({ text: text, done: false });
             localStorage.setItem(`aura_tasks_${userSection}_${currentEditingClass}`, JSON.stringify(tasks));
-            
             input.value = "";
             renderTodoList();
         }
@@ -825,17 +937,21 @@ async function getAIAdvice() {
 
         // --- NAVIGATION & VIEWS ---
         function switchView(viewName) {
-            ['dashboard', 'schedule', 'search', 'profile'].forEach(v => {
+            ['dashboard', 'schedule', 'search', 'profile', 'courses'].forEach(v => {
                 document.getElementById('view-' + v).classList.add('hidden');
-                let btnId = 'nav-' + (v === 'dashboard' ? 'dash' : v);
-                document.getElementById(btnId).classList.remove('active');
+                // Handle nav buttons
+                const btnId = 'nav-' + (v === 'dashboard' ? 'dash' : v);
+                const btn = document.getElementById(btnId);
+                if (btn) btn.classList.remove('active');
             });
+
             document.getElementById('view-' + viewName).classList.remove('hidden');
-            document.getElementById('nav-' + (viewName === 'dashboard' ? 'dash' : viewName)).classList.add('active');
-            
-            if(viewName === 'schedule') {
-                toggleScheduleView(userSection);
-            }
+
+            const activeBtnId = 'nav-' + (viewName === 'dashboard' ? 'dash' : viewName);
+            const activeBtn = document.getElementById(activeBtnId);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            if (viewName === 'schedule') toggleScheduleView(userSection);
         }
 
         // --- SETUP & PROFILE ---
@@ -843,13 +959,12 @@ async function getAIAdvice() {
             const s = document.getElementById("section-input").value;
             const n = document.getElementById("name-input").value;
             const c = document.getElementById("commute-input").value;
-            
-            if(n && c) {
+            if (n && c) {
                 localStorage.setItem("aura_section", s);
                 localStorage.setItem("aura_name", n);
                 localStorage.setItem("aura_commute", c);
                 document.getElementById("setup-screen").classList.remove("active");
-                location.reload(); 
+                location.reload();
             }
         }
 
@@ -860,56 +975,57 @@ async function getAIAdvice() {
         }
 
         function resetSystem() {
-            if(confirm("Reset all data? This deletes your tasks and profile.")) {
+            if (confirm("Reset all data?")) {
                 localStorage.clear();
                 location.reload();
             }
         }
 
-        // --- SEARCH (RESTRICTED) ---
+        function toggleTheme() {
+            const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+            applyTheme(next);
+            localStorage.setItem("aura_theme", next);
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute("data-theme", theme);
+            document.getElementById("icon-sun").classList.toggle("hidden", theme === "light");
+            document.getElementById("icon-moon").classList.toggle("hidden", theme === "dark");
+        }
+
+        // --- SEARCH ---
         function performSearch() {
             const q = document.getElementById("search-bar").value.toLowerCase();
             const res = document.getElementById("search-results");
             res.innerHTML = "";
-            if(q.length < 2) return;
+            if (q.length < 2) return;
 
-            // RESTRICTION: Only search the user's logged-in section
-            const targetSection = userSection; 
-
-            const dayOrder = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"];
             let found = false;
-
-            dayOrder.forEach(day => {
-                if(ROUTINES[targetSection][day]) {
-                    ROUTINES[targetSection][day].forEach(c => {
-                        if(c.n.toLowerCase().includes(q)) {
+            ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"].forEach(day => {
+                if (ROUTINES[userSection][day]) {
+                    ROUTINES[userSection][day].forEach(c => {
+                        if (c.n.toLowerCase().includes(q)) {
                             found = true;
                             const item = document.createElement("div");
                             item.className = "card";
                             item.style.borderLeft = "4px solid var(--primary)";
                             item.style.cursor = "pointer";
-                            
-                            // Click to open task modal (Feature Requirement)
                             item.onclick = () => openTaskModal(c.n);
-
                             item.innerHTML = `
                                 <div style="display:flex; justify-content:space-between;">
                                     <strong>${c.n}</strong>
                                     <span style="color:var(--primary); font-weight:bold;">${c.t}</span>
                                 </div>
                                 <div style="color:var(--text-muted); margin-top:5px;">${day} • Room ${c.r}</div>
-                                <div style="font-size:0.8rem; color:var(--text-muted); margin-top:8px;">Tap to manage tasks</div>
                             `;
                             res.appendChild(item);
                         }
                     });
                 }
             });
-
-            if(!found) {
-                res.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No classes found in ${userSection}.</p>`;
-            }
+            if (!found) res.innerHTML = `<p style="text-align:center; color:var(--text-muted);">No classes found.</p>`;
         }
     </script>
 </body>
+
 </html>
