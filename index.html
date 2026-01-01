@@ -840,9 +840,12 @@
         }
 
         function loadNotice() {
-            const text = localStorage.getItem("aura_notice") || "Will be update soon...";
-            document.getElementById("manual-notice-text").innerHTML = text.replace(/\n/g, "<br>");
+            document.getElementById("manual-notice-text").innerText = localStorage.getItem("aura_notice") || "No new notices.";
         }
+        // function loadNotice() {
+        //     const text = localStorage.getItem("aura_notice") || "Will be update soon...";
+        //     document.getElementById("manual-notice-text").innerHTML = text.replace(/\n/g, "<br>");
+        // }
 
         // --- DASHBOARD LOGIC ---
         function updateDashboard() {
