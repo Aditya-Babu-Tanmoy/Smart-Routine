@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura - Academic Sentinel v2.0</title>
+    <title>Aura - Academic Sentinel v2.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -625,7 +625,7 @@
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:start;">
                 <h2 style="margin-top:0;">Admin Access</h2>
-                <button onclick="document.getElementById('admin-modal').classList.remove('active')"
+                <button onclick="closeAdminModal()"
                     style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
             </div>
 
@@ -683,27 +683,13 @@
             Search
         </button>
 
-
-
-
-
-
-
-
-        <button id="nav-profile" onclick="switchView('courses')">
+        <button id="nav-teachers" onclick="switchView('courses')">
             <svg viewBox="0 0 24 24">
                 <path
                     d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM10 10c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-4 4h8c0-1.33-2.67-2-4-2s-4 .67-4 2z" />
             </svg>
             Teachers List
         </button>
-
-
-
-
-
-
-
 
         <button id="nav-profile" onclick="switchView('profile')">
             <svg viewBox="0 0 24 24">
@@ -810,14 +796,25 @@
             document.getElementById("admin-pass-input").value = "";
         }
 
+        function closeAdminModal() {
+            document.getElementById("admin-modal").classList.remove("active");
+            document.getElementById("admin-pass-input").value = ""; // Security: Clear pass
+        }
+
         function checkAdminLogin() {
             const pass = document.getElementById("admin-pass-input").value;
+            // Password validation (client-side)
             if (pass === "AAJ2025") {
                 document.getElementById("admin-login-view").classList.add("hidden");
                 document.getElementById("admin-editor-view").classList.remove("hidden");
-                document.getElementById("admin-notice-text").value = localStorage.getItem("aura_notice");
+                // Pre-fill with current notice
+                const current = localStorage.getItem("aura_notice") || "No new notices.";
+                document.getElementById("admin-notice-text").value = current;
+                // Clear password field immediately for safety
+                document.getElementById("admin-pass-input").value = "";
             } else {
                 alert("Incorrect Password");
+                document.getElementById("admin-pass-input").value = "";
             }
         }
 
@@ -825,12 +822,18 @@
             const text = document.getElementById("admin-notice-text").value;
             localStorage.setItem("aura_notice", text);
             loadNotice();
-            document.getElementById("admin-modal").classList.remove("active");
+            closeAdminModal();
+            alert("Notice Updated. Note: This is stored on this device. To share with others, a backend is required.");
         }
 
         function loadNotice() {
             const text = localStorage.getItem("aura_notice");
-            document.getElementById("manual-notice-text").innerHTML = text.replace(/\n/g, "<br>");
+            const display = document.getElementById("manual-notice-text");
+            if (text && text.trim() !== "") {
+                display.innerHTML = text.replace(/\n/g, "<br>");
+            } else {
+                display.innerText = "No new notices at this time.";
+            }
         }
 
         // --- DASHBOARD LOGIC ---
@@ -838,17 +841,17 @@
             const name = localStorage.getItem("aura_name");
             document.getElementById("greeting").innerText = `Hello, ${name}`;
             document.getElementById("section-badge").innerText = `${userSection} Student`;
-            document.getElementById("version").innerText = `v1.1`;
+            document.getElementById("version").innerText = `v2.1`;
 
             const now = new Date();
             document.getElementById("today-info").innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
             const dayName = DAYS[now.getDay()];
-            const classes = ROUTINES[userSection][dayName] || [];
+            // Safe access (in case today is Friday/Holiday and not in ROUTINES)
+            const classes = (ROUTINES[userSection] && ROUTINES[userSection][dayName]) ? ROUTINES[userSection][dayName] : [];
             const display = document.getElementById("next-class-display");
             const nextDayCard = document.getElementById("next-day-card");
 
-            // Wake Up Info
             nextDayCard.classList.add("hidden");
 
             // 1. Convert Current Time
@@ -884,15 +887,21 @@
                 // Calculate Next Day
                 let nextDayIndex = (now.getDay() + 1) % 7;
                 let loops = 0;
-                while ((!ROUTINES[userSection][DAYS[nextDayIndex]] || ROUTINES[userSection][DAYS[nextDayIndex]].length === 0) && loops < 7) {
+                let nextDayClasses = [];
+                let nextDayName = "";
+                
+                // Loop until we find a day with classes (max 7 days)
+                while (loops < 7) {
+                    nextDayName = DAYS[nextDayIndex];
+                    if (ROUTINES[userSection][nextDayName] && ROUTINES[userSection][nextDayName].length > 0) {
+                        nextDayClasses = ROUTINES[userSection][nextDayName];
+                        break;
+                    }
                     nextDayIndex = (nextDayIndex + 1) % 7;
                     loops++;
                 }
 
-                const nextDayName = DAYS[nextDayIndex];
-                const nextDayClasses = ROUTINES[userSection][nextDayName];
-
-                if (nextDayClasses && nextDayClasses.length > 0) {
+                if (nextDayClasses.length > 0) {
                     nextDayCard.classList.remove("hidden");
                     nextDayCard.querySelector("h3").innerText = `Upcoming: ${nextDayName}`;
                     const listContainer = document.getElementById("next-day-list");
@@ -920,6 +929,7 @@
             const list = document.getElementById(containerId);
             list.innerHTML = "";
             const activeRoutine = ROUTINES[section];
+            if(!activeRoutine) return; // Safety check
 
             const now = new Date();
             const currentDayName = DAYS[now.getDay()];
@@ -1054,17 +1064,35 @@
 
         // --- NAVIGATION & VIEWS ---
         function switchView(viewName) {
-            ['dashboard', 'schedule', 'search', 'profile', 'courses'].forEach(v => {
+            const views = ['dashboard', 'schedule', 'search', 'profile', 'courses'];
+            
+            // Hide all views
+            views.forEach(v => {
                 document.getElementById('view-' + v).classList.add('hidden');
-                // Handle nav buttons
-                const btnId = 'nav-' + (v === 'dashboard' ? 'dash' : v);
+                
+                // Map view names to button IDs
+                let btnId;
+                if(v === 'dashboard') btnId = 'nav-dash';
+                else if(v === 'schedule') btnId = 'nav-schedule';
+                else if(v === 'search') btnId = 'nav-search';
+                else if(v === 'profile') btnId = 'nav-profile';
+                else if(v === 'courses') btnId = 'nav-teachers';
+                
                 const btn = document.getElementById(btnId);
                 if (btn) btn.classList.remove('active');
             });
 
+            // Show selected view
             document.getElementById('view-' + viewName).classList.remove('hidden');
 
-            const activeBtnId = 'nav-' + (viewName === 'dashboard' ? 'dash' : viewName);
+            // Highlight active button
+            let activeBtnId;
+            if(viewName === 'dashboard') activeBtnId = 'nav-dash';
+            else if(viewName === 'schedule') activeBtnId = 'nav-schedule';
+            else if(viewName === 'search') activeBtnId = 'nav-search';
+            else if(viewName === 'profile') activeBtnId = 'nav-profile';
+            else if(viewName === 'courses') activeBtnId = 'nav-teachers';
+
             const activeBtn = document.getElementById(activeBtnId);
             if (activeBtn) activeBtn.classList.add('active');
 
@@ -1092,7 +1120,7 @@
         }
 
         function resetSystem() {
-            if (confirm("Reset all data?")) {
+            if (confirm("Reset all data? This will clear your settings and tasks.")) {
                 localStorage.clear();
                 location.reload();
             }
@@ -1118,8 +1146,9 @@
             if (q.length < 2) return;
 
             let found = false;
+            // Search logic safely checks if routine exists
             ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"].forEach(day => {
-                if (ROUTINES[userSection][day]) {
+                if (ROUTINES[userSection] && ROUTINES[userSection][day]) {
                     ROUTINES[userSection][day].forEach(c => {
                         if (c.n.toLowerCase().includes(q)) {
                             found = true;
