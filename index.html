@@ -460,16 +460,6 @@
             </p>
         </section>
 
-        <section class="card" style="border-left: 4px solid var(--info);">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="margin:0; color: var(--info);">⏰ Sleep & Commute</h3>
-                <span id="commute-display-dash" style="font-size:0.8rem; color:var(--text-muted);"></span>
-            </div>
-            <div id="wakeup-display" style="margin-top: 10px;">
-                <p>Loading schedule...</p>
-            </div>
-        </section>
-
         <section class="card">
             <h3 id="up-next-title">Up Next</h3>
             <div id="next-class-display">
@@ -526,23 +516,22 @@
                     <tr>
                         <td>DBMS</td>
                         <td>CSE 2221</td>
-                        <td>Raisul Islam (C1 & C2)</td>
+                        <td>Raisul Islam (Lecturer)</td>
                     </tr>
                     <tr>
                         <td>DBMS Lab</td>
                         <td>CSE 2222</td>
-                        <td>Raisul Islam (C1)<br><span style="color:var(--danger); font-size:0.8rem;">C2 Pending</span>
-                        </td>
+                        <td>Raisul Islam (Lecturer)</td>
                     </tr>
                     <tr>
                         <td>Algorithms</td>
                         <td>CSE 2415</td>
-                        <td>Noortaz Rezuana (C1 & C2)</td>
+                        <td>Noortaz Rezoana (Lecturer)</td>
                     </tr>
                     <tr>
                         <td>Algo Lab</td>
                         <td>CSE 2416</td>
-                        <td>Noortaz Rezuana (C1 & C2)</td>
+                        <td>Noortaz Rezoana (Lecturer)</td>
                     </tr>
                     <tr>
                         <td>MM</td>
@@ -557,7 +546,7 @@
                     <tr>
                         <td>MLADE</td>
                         <td>MAT 2207</td>
-                        <td>N.U.M Akramul Kabir Khan (C1 & C2)</td>
+                        <td>N.U.M Akramul Kabir Khan (Associate Professor)</td>
                     </tr>
                 </tbody>
             </table>
@@ -840,7 +829,7 @@
         }
 
         function loadNotice() {
-            const text = localStorage.getItem("aura_notice") || "Will be update soon...";
+            const text = localStorage.getItem("aura_notice");
             document.getElementById("manual-notice-text").innerHTML = text.replace(/\n/g, "<br>");
         }
 
@@ -860,37 +849,6 @@
             const nextDayCard = document.getElementById("next-day-card");
 
             // Wake Up Info
-            const commute = parseInt(localStorage.getItem("aura_commute") || "0");
-            document.getElementById("commute-display-dash").innerText = `Commute: ${commute}m`;
-
-            const wakeDisplay = document.getElementById("wakeup-display");
-            if (classes.length > 0) {
-                // Get time of first class
-                const firstClass = classes[0].t.split('-')[0]; // "13:00"
-                const [h, m] = firstClass.split(':').map(Number);
-                const classMins = h * 60 + m;
-                // Subtract Commute + 60 mins Prep
-                const wakeMins = classMins - commute - 60;
-
-                const wakeH = Math.floor(wakeMins / 60);
-                const wakeM = wakeMins % 60;
-
-                // Format nicely
-                const wakeTimeStr = `${wakeH > 12 ? wakeH - 12 : wakeH}:${wakeM.toString().padStart(2, '0')} ${wakeH >= 12 ? 'PM' : 'AM'}`;
-
-                wakeDisplay.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="font-size:1.8rem;">🛌</span>
-                        <div>
-                            <div style="font-weight:700; font-size:1.1rem;">Wake up at ${wakeTimeStr}</div>
-                            <div style="font-size:0.85rem; color:var(--text-muted);">For ${firstClass} class (1h prep + ${commute}m travel)</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                wakeDisplay.innerHTML = `<p style="color:var(--text-muted);">No classes today. Sleep in! 😴</p>`;
-            }
-
             nextDayCard.classList.add("hidden");
 
             // 1. Convert Current Time
