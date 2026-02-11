@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura - Academic Sentinel v2.1</title>
+    <title>Aura - Academic Sentinel v2.2</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -133,23 +133,13 @@
         }
 
         @keyframes pulse-border {
-            0% {
-                border-color: var(--success);
-            }
-
-            50% {
-                border-color: rgba(16, 185, 129, 0.4);
-            }
-
-            100% {
-                border-color: var(--success);
-            }
+            0% { border-color: var(--success); }
+            50% { border-color: rgba(16, 185, 129, 0.4); }
+            100% { border-color: var(--success); }
         }
 
         /* Inputs & Buttons */
-        input,
-        textarea,
-        select {
+        input, textarea, select {
             width: 100%;
             padding: 14px;
             margin: 8px 0;
@@ -162,9 +152,7 @@
             font-size: 1rem;
         }
 
-        input:focus,
-        textarea:focus,
-        select:focus {
+        input:focus, textarea:focus, select:focus {
             outline: 2px solid var(--primary);
             border-color: transparent;
         }
@@ -187,9 +175,7 @@
             text-decoration: none;
         }
 
-        .btn:active {
-            opacity: 0.8;
-        }
+        .btn:active { opacity: 0.8; }
 
         .btn-outline {
             background: transparent;
@@ -197,21 +183,10 @@
             color: var(--text-main);
         }
 
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-info {
-            background: var(--info);
-            color: white;
-        }
-
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-info { background: var(--info); color: white; }
+        
         .btn-sm {
             padding: 8px 12px;
             font-size: 0.85rem;
@@ -243,7 +218,7 @@
         .toggle-btn.active {
             background: var(--primary);
             color: var(--primary-fg);
-            shadow: var(--shadow);
+            box-shadow: var(--shadow);
         }
 
         /* Navigation */
@@ -278,9 +253,7 @@
             fill: currentColor;
         }
 
-        nav button.active {
-            color: var(--primary);
-        }
+        nav button.active { color: var(--primary); }
 
         /* List Items */
         .class-item {
@@ -292,13 +265,8 @@
             cursor: pointer;
         }
 
-        .class-item:last-child {
-            border-bottom: none;
-        }
-
-        .class-item:active {
-            background-color: var(--bg);
-        }
+        .class-item:last-child { border-bottom: none; }
+        .class-item:active { background-color: var(--bg); }
 
         .task-badge {
             background: var(--primary);
@@ -317,22 +285,15 @@
             margin-top: 10px;
         }
 
-        .data-table th,
-        .data-table td {
+        .data-table th, .data-table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid var(--border);
             font-size: 0.9rem;
         }
 
-        .data-table th {
-            background: var(--bg);
-            font-weight: 600;
-        }
-
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
+        .data-table th { background: var(--bg); font-weight: 600; }
+        .data-table tr:last-child td { border-bottom: none; }
 
         /* ToDo List */
         .todo-item {
@@ -372,10 +333,7 @@
             transition: opacity 0.3s;
         }
 
-        .overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal {
             background: var(--surface);
@@ -388,26 +346,11 @@
         }
 
         /* Fuel Block Specific */
-        #fuel-screen {
-            z-index: 2000;
-            background: var(--bg);
-        }
-
-        .fuel-content {
-            text-align: center;
-            max-width: 400px;
-            padding: 30px;
-        }
-
-        .fuel-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        #fuel-screen { z-index: 2000; background: var(--bg); }
+        .fuel-content { text-align: center; max-width: 400px; padding: 30px; }
+        .fuel-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+        
+        .hidden { display: none !important; }
 
         .admin-edit-btn {
             background: none;
@@ -481,12 +424,7 @@
                 class="btn btn-info" style="margin-top:10px; text-align:center; padding: 15px 0px;">
                 📝 Question Bank(By Arman)
             </a>
-<a href="https://share.google/rgFDYMGIGDADSz66s" target="_blank"
-                class="btn btn-info" style="margin-top:10px; text-align:center; padding: 15px 0px;">
-                📝 Cover Page Generator(By Abrar)
-            </a>
         </section>
-       
     </div>
 
     <div id="view-schedule" class="container hidden">
@@ -591,13 +529,13 @@
                 </div>
             </div>
 
-            <button class="btn btn-outline" style="height: 100%; flex-direction: column; gap: 5px;"
+            <button class="btn btn-outline" style="height: 100%; display:flex; flex-direction: column; gap: 5px;"
                 onclick="openAdminModal()">
                 <span style="font-size: 1.5rem;">⚠️</span>
                 <span>Admin<br>Panel</span>
             </button>
 
-            <button class="btn btn-danger" style="height: 100%; flex-direction: column; gap: 5px;"
+            <button class="btn btn-danger" style="height: 100%; display:flex; flex-direction: column; gap: 5px;"
                 onclick="resetSystem()">
                 <span style="font-size: 1.5rem;">🗑️</span>
                 <span>Reset<br>Data</span>
@@ -707,6 +645,8 @@
 
     <script>
         // --- DATA ---
+        // Keeps 24H format internally for easier math logic, checks, and sorting.
+        // We convert to 12H only when displaying to the user.
         const ROUTINES = {
             "C1": {
                 "Saturday": [{ t: "13:00-14:30", n: "BFE", r: "901" }, { t: "14:30-16:00", n: "DBMS", r: "408" }],
@@ -728,6 +668,25 @@
         let userSection = "C1";
         let scheduleViewSection = "C1";
         let currentEditingClass = null;
+
+        // --- HELPER: 12H Time Converter ---
+        function convertTo12Hour(timeStr) {
+            // Helper to convert single time (e.g. 13:00 -> 1:00 PM)
+            const formatSingle = (t) => {
+                const [h, m] = t.split(':').map(Number);
+                const period = h >= 12 ? 'PM' : 'AM';
+                let hours = h % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+                return `${hours}:${m.toString().padStart(2, '0')} ${period}`;
+            };
+
+            // Handle Ranges (e.g. 13:00-14:30)
+            if (timeStr.includes('-')) {
+                const [start, end] = timeStr.split('-');
+                return `${formatSingle(start)} - ${formatSingle(end)}`;
+            } 
+            return formatSingle(timeStr);
+        }
 
         // --- INITIALIZATION ---
         window.onload = function () {
@@ -761,6 +720,7 @@
         function checkFuelStatus() {
             const now = new Date();
             const dayName = DAYS[now.getDay()];
+            if(!ROUTINES[userSection]) return;
             const todaysClasses = ROUTINES[userSection][dayName];
 
             if (!todaysClasses || todaysClasses.length === 0) return;
@@ -803,19 +763,16 @@
 
         function closeAdminModal() {
             document.getElementById("admin-modal").classList.remove("active");
-            document.getElementById("admin-pass-input").value = ""; // Security: Clear pass
+            document.getElementById("admin-pass-input").value = ""; 
         }
 
         function checkAdminLogin() {
             const pass = document.getElementById("admin-pass-input").value;
-            // Password validation (client-side)
             if (pass === "AAJ2025") {
                 document.getElementById("admin-login-view").classList.add("hidden");
                 document.getElementById("admin-editor-view").classList.remove("hidden");
-                // Pre-fill with current notice
                 const current = localStorage.getItem("aura_notice") || "No new notices.";
                 document.getElementById("admin-notice-text").value = current;
-                // Clear password field immediately for safety
                 document.getElementById("admin-pass-input").value = "";
             } else {
                 alert("Incorrect Password");
@@ -828,7 +785,7 @@
             localStorage.setItem("aura_notice", text);
             loadNotice();
             closeAdminModal();
-            alert("Notice Updated. Note: This is stored on this device. To share with others, a backend is required.");
+            alert("Notice Updated.");
         }
 
         function loadNotice() {
@@ -837,23 +794,7 @@
             if (text && text.trim() !== "") {
                 display.innerHTML = text.replace(/\n/g, "<br>");
             } else {
-
-
-
-
-
-
-
-
-
-                
-                
-                display.innerText = "27 DBMS CT01 "<br>"31 DBMSL Lab performance (C2)";
-            
-            
-            
-            
-            
+                display.innerText = "No new notices at this time.";
             }
         }
 
@@ -862,20 +803,19 @@
             const name = localStorage.getItem("aura_name");
             document.getElementById("greeting").innerText = `Hello, ${name}`;
             document.getElementById("section-badge").innerText = `${userSection} Student`;
-            document.getElementById("version").innerText = `v2.1`;
+            document.getElementById("version").innerText = `v2.2`;
 
             const now = new Date();
             document.getElementById("today-info").innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
             const dayName = DAYS[now.getDay()];
-            // Safe access (in case today is Friday/Holiday and not in ROUTINES)
             const classes = (ROUTINES[userSection] && ROUTINES[userSection][dayName]) ? ROUTINES[userSection][dayName] : [];
             const display = document.getElementById("next-class-display");
             const nextDayCard = document.getElementById("next-day-card");
 
             nextDayCard.classList.add("hidden");
 
-            // 1. Convert Current Time
+            // 1. Convert Current Time to Mins
             const currentMins = now.getHours() * 60 + now.getMinutes();
 
             // 2. Find Next Class Today
@@ -887,14 +827,16 @@
             });
 
             if (nextClass) {
+                // Logic uses 24H data
                 const [startTime] = nextClass.t.split('-');
                 const [hStr, mStr] = startTime.split(':');
                 const diff = (parseInt(hStr) * 60 + parseInt(mStr)) - currentMins;
                 let color = diff < 15 ? "var(--danger)" : "var(--primary)";
 
                 document.getElementById("up-next-title").innerText = "Up Next";
+                // Display uses 12H converter
                 display.innerHTML = `
-                    <h2 style="font-size:2.5rem; margin:10px 0; color:${color};">${nextClass.t}</h2>
+                    <h2 style="font-size:2.5rem; margin:10px 0; color:${color};">${convertTo12Hour(nextClass.t)}</h2>
                     <p style="font-size:1.2rem; font-weight:600;">${nextClass.n}</p>
                     <p style="color:var(--text-muted);">Room ${nextClass.r} • Starts in ${Math.floor(diff / 60)}h ${diff % 60}m</p>
                 `;
@@ -911,7 +853,6 @@
                 let nextDayClasses = [];
                 let nextDayName = "";
                 
-                // Loop until we find a day with classes (max 7 days)
                 while (loops < 7) {
                     nextDayName = DAYS[nextDayIndex];
                     if (ROUTINES[userSection][nextDayName] && ROUTINES[userSection][nextDayName].length > 0) {
@@ -931,7 +872,8 @@
                         const div = document.createElement("div");
                         div.style.padding = "10px";
                         div.style.borderBottom = "1px solid var(--border)";
-                        div.innerHTML = `<b>${c.t}</b> - ${c.n} <small>(${c.r})</small>`;
+                        // Display uses 12H converter
+                        div.innerHTML = `<b>${convertTo12Hour(c.t)}</b> - ${c.n} <small>(${c.r})</small>`;
                         listContainer.appendChild(div);
                     });
                 }
@@ -950,7 +892,7 @@
             const list = document.getElementById(containerId);
             list.innerHTML = "";
             const activeRoutine = ROUTINES[section];
-            if(!activeRoutine) return; // Safety check
+            if(!activeRoutine) return;
 
             const now = new Date();
             const currentDayName = DAYS[now.getDay()];
@@ -974,7 +916,7 @@
                         let highlightClass = '';
                         let activeTag = '';
 
-                        // HIGHLIGHT LOGIC
+                        // HIGHLIGHT LOGIC uses 24H data (c.t) for accuracy
                         if (day === currentDayName && section === userSection) {
                             const [startStr, endStr] = c.t.split('-');
                             const [sh, sm] = startStr.split(':').map(Number);
@@ -983,14 +925,13 @@
                             const sMins = sh * 60 + sm;
                             const eMins = eh * 60 + em;
 
-                            // Highlight if currently active OR upcoming within 30 mins
                             if ((currentMins >= sMins && currentMins < eMins) || (currentMins < sMins && currentMins >= sMins - 30)) {
                                 highlightClass = 'highlight-active';
                                 activeTag = `<span class="highlight-tag">Active</span>`;
                             }
                         }
 
-                        // Task Count Badge
+                        // Task Count
                         if (section === userSection) {
                             const tasks = JSON.parse(localStorage.getItem(`aura_tasks_${section}_${c.n}`) || "[]");
                             const pending = tasks.filter(t => !t.done).length;
@@ -1000,16 +941,15 @@
                         const displayColor = c.color || "var(--primary)";
                         row.style.borderLeft = c.color ? `4px solid ${c.color}` : "none";
                         if (c.color) row.style.backgroundColor = "rgba(255, 0, 0, 0.05)";
-
-                        // Apply Highlight
                         if (highlightClass) row.classList.add(highlightClass);
 
+                        // DISPLAY uses 12H converter
                         row.innerHTML = `
                             <div>
                                 <div style="font-weight:700; font-size:1rem; color: ${displayColor};">${c.n} ${badge} ${activeTag}</div>
                                 <div style="color:var(--text-muted); font-size:0.9rem;">${c.r}</div>
                             </div>
-                            <div style="font-weight:700; color: ${displayColor};">${c.t}</div>
+                            <div style="font-weight:700; color: ${displayColor};">${convertTo12Hour(c.t)}</div>
                         `;
 
                         if (section === userSection) row.onclick = () => openTaskModal(c.n);
@@ -1086,12 +1026,9 @@
         // --- NAVIGATION & VIEWS ---
         function switchView(viewName) {
             const views = ['dashboard', 'schedule', 'search', 'profile', 'courses'];
-            
-            // Hide all views
             views.forEach(v => {
                 document.getElementById('view-' + v).classList.add('hidden');
                 
-                // Map view names to button IDs
                 let btnId;
                 if(v === 'dashboard') btnId = 'nav-dash';
                 else if(v === 'schedule') btnId = 'nav-schedule';
@@ -1103,10 +1040,8 @@
                 if (btn) btn.classList.remove('active');
             });
 
-            // Show selected view
             document.getElementById('view-' + viewName).classList.remove('hidden');
 
-            // Highlight active button
             let activeBtnId;
             if(viewName === 'dashboard') activeBtnId = 'nav-dash';
             else if(viewName === 'schedule') activeBtnId = 'nav-schedule';
@@ -1167,7 +1102,6 @@
             if (q.length < 2) return;
 
             let found = false;
-            // Search logic safely checks if routine exists
             ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"].forEach(day => {
                 if (ROUTINES[userSection] && ROUTINES[userSection][day]) {
                     ROUTINES[userSection][day].forEach(c => {
@@ -1178,10 +1112,11 @@
                             item.style.borderLeft = "4px solid var(--primary)";
                             item.style.cursor = "pointer";
                             item.onclick = () => openTaskModal(c.n);
+                            // Display uses 12H converter
                             item.innerHTML = `
                                 <div style="display:flex; justify-content:space-between;">
                                     <strong>${c.n}</strong>
-                                    <span style="color:var(--primary); font-weight:bold;">${c.t}</span>
+                                    <span style="color:var(--primary); font-weight:bold;">${convertTo12Hour(c.t)}</span>
                                 </div>
                                 <div style="color:var(--text-muted); margin-top:5px;">${day} • Room ${c.r}</div>
                             `;
